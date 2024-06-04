@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrepreneurial Projects</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background-image: url('./img/image002.png');
+      background-size: 100% auto; /* Ensures image always takes full width */
+      background-color: #f4f4f4; /* Very light grey background */
+      color: black; /* Sets text content to black */
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(244, 244, 244, 0.5); /* 50% transparent background color */
+      z-index: -1;
+    }
+    table, th, td {
+      border: 1px solid black; /* Black borders for the table */
+      text-align: center; /* Centers all text horizontally within cells */
+      padding: 10px; /* Adds padding to cells */
+    }
+    td {
+      white-space: break-spaces; /* Ensures descriptions don't get cut off */
+    }
+    .vertical-text {
+      writing-mode: vertical-rl; /* Writes text vertically from right to left */
+      text-orientation: mixed; /* Maintains horizontal orientation for numbers */
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 1em 0;
+      text-align: center;
+      width: 100%; /* Ensures header takes full width */
+      position: fixed; /* Keeps the header fixed at the top */
+      top: 0;
+      left: 0;
+      z-index: 1000; /* Ensures header stays on top */
+    }
+    nav a {
+      margin: 0 15px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-top: 100px; /* Adds padding to account for fixed header */
+    }
+    main {
+      padding: 20px;
+      text-align: center; /* Center align main content */
+    }
+    .title {
+      font-size: 24px; /* Larger font size for the title */
+      margin: 20px 0; /* Margin for the title */
+    }
+    .max-width-table {
+      max-width: 1000px; /* Sets maximum width for the table */
+      width: 100%;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hector Franco: A.I. Entrepreneur</h1>
+    <nav>
+      <a href="index.html">Biography</a>
+      <a href="projects.html">Start-up Portfolio</a>
+      <a href="https://www.linkedin.com/in/ofrancophd/">LinkedIn</a>
+    </nav>
+  </header>
+  <div class="container">
+    <main>
+      <div>
+        <p class="title">Entrepreneurship quick and slow failures and successes:</p>
+        <table class="max-width-table">
+          <tbody>
+            <tr>
+              <td><strong>Problem to be solved</strong></td>
+              <td><strong>Proposed solutions</strong></td>
+              <td><strong>Initiative fate</strong></td>
+              <td class="vertical-text"><strong>Year</strong></td>
+            </tr>
+            <tr>
+              <td>Can you see the rainbow after the rain? Many people can&apos;t see it due to preventable blindness.</td>
+              <td>iKey developed a technology for comparing retina images.<br> <a href="https://www.ikey.ie">iKey</a></td>
+              <td>In the process of acquisition.</td>
+              <td class="vertical-text">2019-23 *</td>
+            </tr>
+            <tr>
+              <td>Helping businesses to identify their best customers.</td>
+              <td>LoyLap is a virtual loyalty card for payments. <br> <a href="https://www.loylap.com/">loylap</a></td></td>
+              <td>The company is still trading.</td>
+              <td class="vertical-text">2018 *</td>
+            </tr>
+            <tr>
+              <td>Business needs to identify their best and most influential customers to promote their business.</td>
+              <td>Predictive analytics platform built in collaboration with Technological University of Dublin.</td>
+              <td>Aborted due to difficulties collaborating with the public administration.</td>
+              <td class="vertical-text">2017-18</td>
+            </tr>
+            <tr>
+              <td>My own need for more social interaction.</td>
+              <td>Opened a page on Airbnb to get experience dealing directly with clients and attending to their needs.</td>
+              <td>I closed it and moved on. Not an exponential company but profitable and fun.</td>
+              <td class="vertical-text">2015</td>
+            </tr>
+            <tr>
+              <td>Difficulties getting a loan at a low-interest rate and P2P loans to friends.</td>
+              <td>Crowdlending friends: funding is provided by a network of friends at increasing interest rates from further nodes.</td>
+              <td>Difficulties testing the market and regulations.</td>
+              <td class="vertical-text">2013</td>
+            </tr>
+            <tr>
+              <td>Internet Of Things: communication between intelligent objects.</td>
+              <td>Misakai: General library for broadcasting and filtering messages between devices. Backend as a service.</td>
+              <td>Too difficult to work with the other founder, the company still exists without growth.</td>
+              <td class="vertical-text">2013 *</td>
+            </tr>
+            <tr>
+              <td>None.</td>
+              <td>Contrastify: Search engine for public emotion on a keyword, based on sentiment analysis of tweets.</td>
+              <td>Low usage.</td>
+              <td class="vertical-text">2012</td>
+            </tr>
+            <tr>
+              <td>Males need to showcase their creativity in courtship.</td>
+              <td>A poem editor that assists in finding the rhyming word while encouraging the writer to write more through a chatbot, also to publish the poem and deliver it with other expensive goods.</td>
+              <td>Abandoned due to technological NLP problems, excessive distraction from incubator advisors, and personal needs (finish the PhD).</td>
+              <td class="vertical-text">2011</td>
+            </tr>
+            <tr>
+              <td>Research workers need to prove what work they did and when to be able to stop patents from competitors, a document that can be used in court, among other needs for a research diary as an assistant tool.</td>
+              <td>A digital lab notebook in which the company proves the submission times with timestamps, like a blockchain with no modifications of previous transactions.</td>
+              <td>Abandoned due to the difficulties in identifying possible buyers. Research workers rarely want to be audited, and institutions are difficult to work with.</td>
+              <td class="vertical-text">2009</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+	<div>
+	*Means I join after the start-up was founded or had a secondary role <br> 
+	</div>  
+    </main>
+  </div>
+</body>
+</html>
