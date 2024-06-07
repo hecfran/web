@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     body {
-      background-image: url('./img/image002.png');
+      <!-- background-image: url('./img/image002.png'); -->
       background-size: 100% auto; /* Ensures image always takes full width */
       background-color: #f4f4f4; /* Very light grey background */
       color: black; /* Sets text content to black */
       position: relative;
+	  filter: grayscale(90%);
     }
     body::before {
       content: "";
@@ -74,6 +75,15 @@
     }
   </style>
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M3TV3Z6VV7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M3TV3Z6VV7');
+</script>
 <body>
   <header>
     <h1>Hector Franco: A.I. Entrepreneur</h1>
@@ -157,5 +167,9 @@
 	</div>  
     </main>
   </div>
+    <footer>
+        <p>&copy; 2024 Hector Franco</p>
+    </footer>
 </body>
+
 </html>
