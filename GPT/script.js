@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedApiKey = getCookie('apiKey');
     apiKeyInput.value = savedApiKey || '';
     apiKeyInput.placeholder = savedApiKey ? '' : 'Write your API key here';
+    addInitialMessage();
 });
 
 // Save API key when input changes
@@ -47,13 +48,26 @@ promptInput.addEventListener('keypress', function (e) {
 
 sendBtn.addEventListener('click', sendPrompt);
 
+function addInitialMessage() {
+    const initialMessage = document.createElement('div');
+    initialMessage.className = 'message bot-message';
+    initialMessage.innerText = 'Please write your private OpenAI key at the bottom left field to use this page.';
+    initialMessage.id = 'initial-message';
+    chatContainer.appendChild(initialMessage);
+}
+
 async function sendPrompt() {
     const apiKey = apiKeyInput.value.trim();
     const prompt = promptInput.value.trim();
     const model = modelSelect.value;
     const temperature = parseFloat(temperatureInput.value.trim());
 
-    if (!apiKey || !prompt) return;
+    if (!apiKey) {
+        alert('API key is required.');
+        return;
+    }
+
+    if (!prompt) return;
 
     const userMessage = { role: 'user', content: prompt };
     addMessageToChat(userMessage, 'user-message');
@@ -65,6 +79,8 @@ async function sendPrompt() {
     responseDiv.innerText = 'Loading...';
     chatContainer.appendChild(responseDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    const startTime = Date.now();
 
     try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -80,11 +96,16 @@ async function sendPrompt() {
             })
         });
 
+        const endTime = Date.now();
+        const duration = ((endTime - startTime) / 1000).toFixed(2);
+
         const data = await response.json();
         if (response.ok) {
             const botMessage = { role: 'assistant', content: data.choices[0].message.content };
             conversation.push(botMessage);
-            displayResponse(botMessage.content, responseDiv, data.usage);
+            displayResponse(botMessage.content, responseDiv, data.usage, model, duration);
+            const initialMessage = document.getElementById('initial-message');
+            if (initialMessage) initialMessage.remove();
         } else {
             responseDiv.innerText = 'Error: ' + (data.error.message || 'Unknown error');
         }
@@ -101,7 +122,7 @@ function addMessageToChat(message, className) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-function displayResponse(content, responseDiv, usage) {
+function displayResponse(content, responseDiv, usage, model, duration) {
     responseDiv.innerHTML = ''; // Clear loading text
     const originalContent = content;
     const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
@@ -144,13 +165,6 @@ function displayResponse(content, responseDiv, usage) {
         });
         copyBtnContainer.appendChild(copyBtn);
 
-        if (usage) {
-            const tokenInfo = document.createElement('div');
-            tokenInfo.className = 'token-info';
-            tokenInfo.innerText = `Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}`;
-            copyBtnContainer.appendChild(tokenInfo);
-        }
-
         responseDiv.appendChild(copyBtnContainer);
 
         lastIndex = codeBlockRegex.lastIndex;
@@ -181,11 +195,24 @@ function displayResponse(content, responseDiv, usage) {
     if (usage) {
         const tokenInfo = document.createElement('div');
         tokenInfo.className = 'token-info';
-        tokenInfo.innerText = `Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}`;
+        
+        const cost = calculateCost(usage.prompt_tokens, usage.completion_tokens, model);
+        
+        tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, Cost: ${cost.toFixed(6)}c`;
         copyBtnContainer.appendChild(tokenInfo);
     }
 
     responseDiv.appendChild(copyBtnContainer);
 
     chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function calculateCost(promptTokens, completionTokens, model) {
+    let cost = 0;
+    if (model === 'gpt-4o') {
+        cost = ((promptTokens * 5 / 1000000) + (completionTokens * 15 / 1000000)) * 100;
+    } else if (model === 'gpt-3.5-turbo') {
+        cost = ((promptTokens * 0.5 / 1000000) + (completionTokens * 1.5 / 1000000)) * 100;
+    }
+    return cost;
 }
