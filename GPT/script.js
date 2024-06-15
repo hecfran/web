@@ -4,6 +4,7 @@ const modelSelect = document.getElementById('model-select');
 const temperatureInput = document.getElementById('temperature');
 const sendBtn = document.getElementById('send-btn');
 const chatContainer = document.getElementById('chat-container');
+const streamingCheckbox = document.getElementById('streaming-checkbox');
 let conversation = [];
 
 // Function to set a cookie
@@ -61,6 +62,7 @@ async function sendPrompt() {
     const prompt = promptInput.value.trim();
     const model = modelSelect.value;
     const temperature = parseFloat(temperatureInput.value.trim());
+    const streamingEnabled = streamingCheckbox.checked;
 
     if (!apiKey) {
         alert('API key is required.');
@@ -82,35 +84,99 @@ async function sendPrompt() {
 
     const startTime = Date.now();
 
-    try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: model,
-                messages: conversation,
-                temperature: temperature
-            })
-        });
+    if (streamingEnabled) {
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: conversation,
+                    temperature: temperature,
+                    stream: true
+                })
+            });
 
-        const endTime = Date.now();
-        const duration = ((endTime - startTime) / 1000).toFixed(2);
+            if (!response.body) throw new Error('No response body');
 
-        const data = await response.json();
-        if (response.ok) {
-            const botMessage = { role: 'assistant', content: data.choices[0].message.content };
-            conversation.push(botMessage);
-            displayResponse(botMessage.content, responseDiv, data.usage, model, duration);
-            const initialMessage = document.getElementById('initial-message');
-            if (initialMessage) initialMessage.remove();
-        } else {
-            responseDiv.innerText = 'Error: ' + (data.error.message || 'Unknown error');
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let content = '';
+            let promptTokens = 0;
+            let completionTokens = 0;
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                const chunk = decoder.decode(value, { stream: true });
+
+                // Split the chunk into individual data events
+                const dataEvents = chunk.split('\n\n').filter(Boolean);
+
+                for (const dataEvent of dataEvents) {
+                    if (dataEvent.trim() === 'data: [DONE]') {
+                        // End of stream
+                        const endTime = Date.now();
+                        const duration = ((endTime - startTime) / 1000).toFixed(2);
+                        const botMessage = { role: 'assistant', content: content };
+                        conversation.push(botMessage);
+                        displayResponse(content, responseDiv, { prompt_tokens: promptTokens, completion_tokens: completionTokens }, model, duration);
+                        const initialMessage = document.getElementById('initial-message');
+                        if (initialMessage) initialMessage.remove();
+                        return;
+                    }
+
+                    if (dataEvent.startsWith('data:')) {
+                        const data = JSON.parse(dataEvent.slice(5)); // Remove 'data:'
+                        const chunkContent = data.choices[0].delta.content || '';
+                        content += chunkContent;
+                        responseDiv.innerText = content;
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                        
+                        if (data.usage) {
+                            promptTokens = data.usage.prompt_tokens;
+                            completionTokens = data.usage.completion_tokens;
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            responseDiv.innerText = 'Error: ' + error.message;
         }
-    } catch (error) {
-        responseDiv.innerText = 'Error: ' + error.message;
+    } else {
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: conversation,
+                    temperature: temperature
+                })
+            });
+
+            const endTime = Date.now();
+            const duration = ((endTime - startTime) / 1000).toFixed(2);
+
+            const data = await response.json();
+            if (response.ok) {
+                const botMessage = { role: 'assistant', content: data.choices[0].message.content };
+                conversation.push(botMessage);
+                displayResponse(botMessage.content, responseDiv, data.usage, model, duration);
+                const initialMessage = document.getElementById('initial-message');
+                if (initialMessage) initialMessage.remove();
+            } else {
+                responseDiv.innerText = 'Error: ' + (data.error.message || 'Unknown error');
+            }
+        } catch (error) {
+            responseDiv.innerText = 'Error: ' + error.message;
+        }
     }
 }
 
@@ -151,7 +217,7 @@ function displayResponse(content, responseDiv, usage, model, duration) {
         // Add a copy button under the code block
         const copyBtnContainer = document.createElement('div');
         copyBtnContainer.className = 'copy-btn-container';
-        
+
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
         copyBtn.innerText = 'Copy';
@@ -178,7 +244,7 @@ function displayResponse(content, responseDiv, usage, model, duration) {
     // Add a copy button under the response
     const copyBtnContainer = document.createElement('div');
     copyBtnContainer.className = 'copy-btn-container';
-    
+
     const copyBtn = document.createElement('button');
     copyBtn.className = 'copy-btn';
     copyBtn.innerText = 'Copy';
@@ -195,9 +261,9 @@ function displayResponse(content, responseDiv, usage, model, duration) {
     if (usage) {
         const tokenInfo = document.createElement('div');
         tokenInfo.className = 'token-info';
-        
+
         const cost = calculateCost(usage.prompt_tokens, usage.completion_tokens, model);
-        
+
         tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, Cost: ${cost.toFixed(6)}c`;
         copyBtnContainer.appendChild(tokenInfo);
     }
@@ -209,7 +275,11 @@ function displayResponse(content, responseDiv, usage, model, duration) {
 
 function calculateCost(promptTokens, completionTokens, model) {
     let cost = 0;
-    if (model === 'gpt-4o') {
+    if (model === 'gpt-4') {
+        cost = ((promptTokens * 30 / 1000000) + (completionTokens * 60 / 1000000)) * 100;
+    } else if (model === 'gpt-4-turbo') {
+        cost = ((promptTokens * 10 / 1000000) + (completionTokens * 30 / 1000000)) * 100;
+    } else if (model === 'gpt-4o') {
         cost = ((promptTokens * 5 / 1000000) + (completionTokens * 15 / 1000000)) * 100;
     } else if (model === 'gpt-3.5-turbo') {
         cost = ((promptTokens * 0.5 / 1000000) + (completionTokens * 1.5 / 1000000)) * 100;
