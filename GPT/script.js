@@ -8,6 +8,7 @@ const chatContainer = document.getElementById('chat-container');
 const streamingCheckbox = document.getElementById('streaming-checkbox');
 let conversation = [];
 let systemMessageDisplayed = false;
+var acumulatedcost = 0
 
 // Function to set a cookie
 function setCookie(name, value, days) {
@@ -35,9 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     apiKeyInput.value = savedApiKey || '';
     apiKeyInput.placeholder = savedApiKey ? '' : 'Write your API key here';
     addInitialMessage();
-	//ading system instructions
-	loadSystemMessage(); // Load the message when the page loads
-    document.getElementById('system-message').addEventListener('input', saveSystemMessage); // Save the message when modified	
 });
 
 // Save API key when input changes
@@ -90,6 +88,7 @@ async function sendPrompt() {
         systemMessageDisplay.innerText = systemMessage;
         chatContainer.insertBefore(systemMessageDisplay, chatContainer.firstChild);
     }
+	systemMessageInput.style.display = 'none';  // Hide input box hid it anyway
 
     const userMessage = { role: 'user', content: prompt };
     addMessageToChat(userMessage, 'user-message');
@@ -283,9 +282,9 @@ function displayResponse(content, responseDiv, usage, model, duration) {
         tokenInfo.className = 'token-info';
 
         const cost = calculateCost(usage.prompt_tokens, usage.completion_tokens, model);
-
+		acumulatedcost = acumulatedcost + cost
         if (cost > 0) {
-            tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, Cost: ${cost.toFixed(6)}c`;
+            tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, model: ${model}, response cost: ${cost.toFixed(4)}c  acumulated cost: ${acumulatedcost.toFixed(2)}c`;
             copyBtnContainer.appendChild(tokenInfo);
         }
     }
@@ -323,3 +322,9 @@ function loadSystemMessage() {
         document.getElementById('system-message').value = systemMessage;
     }
 }
+
+// Set up event listeners
+document.addEventListener('DOMContentLoaded', function () {
+    loadSystemMessage(); // Load the message when the page loads
+    document.getElementById('system-message').addEventListener('input', saveSystemMessage); // Save the message when modified
+});
