@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hector O&apos;Franco - A.I. Consultant</title>
+    <title>Hector O'Franco - A.I. Consultant</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="img/logo.png" type="image/png">
+    <style>
+        .content-panel table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .content-panel th, .content-panel td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        .content-panel .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+    </style>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3TV3Z6VV7"></script>
@@ -18,26 +33,136 @@
 </script>
 <body>
     <header>
-        <h1>Hector O&apos;Franco: A.I. Consultant</h1>
+        <h1>Hector O'Franco: A.I. Consultant</h1>
         <nav>
-            <a href="index.html">Biography</a>
-            <a href="projects.html">Start-up Portfolio</a>
+            <a href="#" onclick="showPanel('biography')">Biography</a>
+            <a href="#" onclick="showPanel('portfolio')">Start-up Portfolio</a>
+            <a href="#" onclick="showPanel('demos')">Demos</a>
             <a href="https://www.linkedin.com/in/ofrancophd/">LinkedIn</a>
         </nav>
     </header>
     <main>
-        <section>
+        <section id="biography" class="content-panel">
             <h2>Biography</h2>
             <img src="img/HectorFranco.jpg" alt="Hector Franco" class="intro-image">
-            <p>Hector O&apos;Franco is a seasoned A.I. consultant with over a decade of experience in machine learning, data analytics, and computer vision. He has contributed to numerous innovative projects across diverse industries, including healthcare, agriculture, and insurance. Hector’s expertise lies in transforming complex data into actionable insights, driving technological advancements, and leading cross-functional teams to success. He holds a Ph.D. in Artificial Intelligence from Trinity College Dublin and has a passion for entrepreneurship, evident through his involvement in multiple start-ups.</p>
+            <p>Hector O'Franco is a seasoned A.I. consultant with over a decade of experience in machine learning, data analytics, and computer vision. He has contributed to numerous innovative projects across diverse industries, including healthcare, agriculture, and insurance. Hector’s expertise lies in transforming complex data into actionable insights, driving technological advancements, and leading cross-functional teams to success. He holds a Ph.D. in Artificial Intelligence from Trinity College Dublin and has a passion for entrepreneurship, evident through his involvement in multiple start-ups.</p>
             <p>As a software engineer with a Ph.D. in computer science, I have over six years of experience in image processing, data science, and artificial intelligence. I am passionate about analyzing human behavior through big data and developing innovative solutions that enhance user experience and satisfaction.</p>
             <p>Find my personal articles at my <a href="https://www.linkedin.com/in/ofrancophd/recent-activity/articles/">professional blog</a></p>
-			<p>Many of you ask me about large languge models with the latest hipe in NLP, and what can be build with it. You can find here a <a href=GPT\index.html> toy chatGPT user interface</a> that works with your private chatgpt key and helps you to explore response time and costs for different models</p>
-			
+            <p>Many of you ask me about large language models with the latest hype in NLP, and what can be built with it. You can find here a <a href="GPT/index.html">toy chatGPT user interface</a> that works with your private chatgpt key and helps you to explore response time and costs for different models.</p>
+        </section>
+
+        <section id="portfolio" class="content-panel" style="display:none;">
+            <h2>Start-up Portfolio</h2>
+            <img src="img/image002.png" alt="entrepreneurship" class="intro-image">
+
+            <p class="title">Entrepreneurship quick and slow failures and successes:</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Problem to be solved</th>
+                        <th>Proposed solutions</th>
+                        <th>Initiative fate</th>
+                        <th class="vertical-text">Year</th>
+                    </tr>
+                    <tr>
+                        <td>Can you see the rainbow after the rain? Many people can't see it due to preventable blindness.</td>
+                        <td>iKey developed a technology for comparing retina images.<br> <a href="https://www.ikey.ie">iKey</a></td>
+                        <td>This is confidential information</td>
+                        <td class="vertical-text">2019-23 *</td>
+                    </tr>
+                    <tr>
+                        <td>Helping businesses to identify their best customers.</td>
+                        <td>LoyLap is a virtual loyalty card for payments.<br> <a href="https://www.loylap.com/">loylap</a></td>
+                        <td>The company is still trading.</td>
+                        <td class="vertical-text">2018 *</td>
+                    </tr>
+                    <tr>
+                        <td>Business needs to identify their best and most influential customers to promote their business.</td>
+                        <td>Predictive analytics platform built in collaboration with Technological University of Dublin.</td>
+                        <td>Aborted due to difficulties collaborating with the public administration.</td>
+                        <td class="vertical-text">2017-18</td>
+                    </tr>
+                    <tr>
+                        <td>My own need for more social interaction.</td>
+                        <td>Opened a page on Airbnb to get experience dealing directly with clients and attending to their needs.</td>
+                        <td>I closed it and moved on. Not an exponential company but profitable and fun.</td>
+                        <td class="vertical-text">2015</td>
+                    </tr>
+                    <tr>
+                        <td>Difficulties getting a loan at a low-interest rate and P2P loans to friends.</td>
+                        <td>Crowdlending friends: funding is provided by a network of friends at increasing interest rates from further nodes.</td>
+                        <td>Difficulties testing the market and regulations.</td>
+                        <td class="vertical-text">2013</td>
+                    </tr>
+                    <tr>
+                        <td>Internet Of Things: communication between intelligent objects.</td>
+                        <td>Misakai: General library for broadcasting and filtering messages between devices. Backend as a service.</td>
+                        <td>Too difficult to work with the other founder, the company still exists without growth.</td>
+                        <td class="vertical-text">2013 *</td>
+                    </tr>
+                    <tr>
+                        <td>None.</td>
+                        <td>Contrastify: Search engine for public emotion on a keyword, based on sentiment analysis of tweets.</td>
+                        <td>Low usage.</td>
+                        <td class="vertical-text">2012</td>
+                    </tr>
+                    <tr>
+                        <td>Males need to showcase their creativity in courtship.</td>
+                        <td>A poem editor that assists in finding the rhyming word while encouraging the writer to write more through a chatbot, also to publish the poem and deliver it with other expensive goods.</td>
+                        <td>Abandoned due to technological NLP problems, excessive distraction from incubator advisors, and personal needs (finish the PhD).</td>
+                        <td class="vertical-text">2011</td>
+                    </tr>
+                    <tr>
+                        <td>Research workers need to prove what work they did and when to be able to stop patents from competitors, a document that can be used in court, among other needs for a research diary as an assistant tool.</td>
+                        <td>A digital lab notebook in which the company proves the submission times with timestamps, like a blockchain with no modifications of previous transactions.</td>
+                        <td>Abandoned due to the difficulties in identifying possible buyers. Research workers rarely want to be audited, and institutions are difficult to work with.</td>
+                        <td class="vertical-text">2009</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="demos" class="content-panel" style="display:none;">
+            <h2>Demos</h2>
+            <img src="img/image002.png" alt="entrepreneurship" class="intro-image">
+
+            <table class="max-width-table">
+                <thead>
+                    <tr>
+                        <th>Link</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="./GPT">GPT Explorer</a></td>
+                        <td>An explorer for GPT costs and response times.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="./Hanoi">Towers of Hanoi</a></td>
+                        <td>Solving the classical computer science problem of the Towers of Hanoi.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="./GOL">Game of Life</a></td>
+                        <td>An implementation of Conway's Game of Life.</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 Hector O&apos;Franco</p>
+        <p>&copy; 2024 Hector O'Franco</p>
     </footer>
+
+    <script>
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.content-panel');
+            panels.forEach(panel => {
+                panel.style.display = 'none';
+            });
+            document.getElementById(panelId).style.display = 'block';
+            document.title = document.querySelector(`a[onclick="showPanel('${panelId}')"]`).textContent + ' - Hector O\'Franco';
+        }
+    </script>
 </body>
 </html>
