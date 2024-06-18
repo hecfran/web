@@ -305,7 +305,7 @@ function calculateCost(promptTokens, completionTokens, model) {
     } else if (model === 'gpt-3.5-turbo') {
         cost = ((promptTokens * 0.5 / 1000000) + (completionTokens * 1.5 / 1000000)) * 100;
     }
-    return cost;
+    return cost; 
 }
 
 
