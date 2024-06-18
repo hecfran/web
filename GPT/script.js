@@ -1,3 +1,4 @@
+const systemMessageInput = document.getElementById('system-message');
 const apiKeyInput = document.getElementById('api-key');
 const promptInput = document.getElementById('prompt');
 const modelSelect = document.getElementById('model-select');
@@ -6,6 +7,7 @@ const sendBtn = document.getElementById('send-btn');
 const chatContainer = document.getElementById('chat-container');
 const streamingCheckbox = document.getElementById('streaming-checkbox');
 let conversation = [];
+let systemMessageDisplayed = false;
 
 // Function to set a cookie
 function setCookie(name, value, days) {
@@ -33,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     apiKeyInput.value = savedApiKey || '';
     apiKeyInput.placeholder = savedApiKey ? '' : 'Write your API key here';
     addInitialMessage();
+	//ading system instructions
+	loadSystemMessage(); // Load the message when the page loads
+    document.getElementById('system-message').addEventListener('input', saveSystemMessage); // Save the message when modified	
 });
 
 // Save API key when input changes
@@ -59,17 +64,32 @@ function addInitialMessage() {
 
 async function sendPrompt() {
     const apiKey = apiKeyInput.value.trim();
-    const prompt = promptInput.value.trim();
+    var prompt = promptInput.value.trim();
     const model = modelSelect.value;
     const temperature = parseFloat(temperatureInput.value.trim());
     const streamingEnabled = streamingCheckbox.checked;
+    const systemMessage = systemMessageInput.value.trim();
 
     if (!apiKey) {
         alert('API key is required.');
         return;
     }
 
-    if (!prompt) return;
+    if (!prompt){
+		prompt='.'
+	}
+
+    // Add system message if provided and not already added
+    if (systemMessage && !systemMessageDisplayed) {
+        const systemMessageObj = { role: 'system', content: systemMessage };
+        conversation.unshift(systemMessageObj);
+        systemMessageDisplayed = true;
+        systemMessageInput.style.display = 'none';  // Hide input box
+        const systemMessageDisplay = document.createElement('div');
+        systemMessageDisplay.className = 'system-message';
+        systemMessageDisplay.innerText = systemMessage;
+        chatContainer.insertBefore(systemMessageDisplay, chatContainer.firstChild);
+    }
 
     const userMessage = { role: 'user', content: prompt };
     addMessageToChat(userMessage, 'user-message');
@@ -135,7 +155,7 @@ async function sendPrompt() {
                         content += chunkContent;
                         responseDiv.innerText = content;
                         chatContainer.scrollTop = chatContainer.scrollHeight;
-                        
+
                         if (data.usage) {
                             promptTokens = data.usage.prompt_tokens;
                             completionTokens = data.usage.completion_tokens;
@@ -258,14 +278,16 @@ function displayResponse(content, responseDiv, usage, model, duration) {
     });
     copyBtnContainer.appendChild(copyBtn);
 
-    if (usage) {
+    if (usage && (usage.prompt_tokens > 0 || usage.completion_tokens > 0)) {
         const tokenInfo = document.createElement('div');
         tokenInfo.className = 'token-info';
 
         const cost = calculateCost(usage.prompt_tokens, usage.completion_tokens, model);
 
-        tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, Cost: ${cost.toFixed(6)}c`;
-        copyBtnContainer.appendChild(tokenInfo);
+        if (cost > 0) {
+            tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, Cost: ${cost.toFixed(6)}c`;
+            copyBtnContainer.appendChild(tokenInfo);
+        }
     }
 
     responseDiv.appendChild(copyBtnContainer);
@@ -285,4 +307,19 @@ function calculateCost(promptTokens, completionTokens, model) {
         cost = ((promptTokens * 0.5 / 1000000) + (completionTokens * 1.5 / 1000000)) * 100;
     }
     return cost;
+}
+
+
+// Function to save the value of system-message in a cookie
+function saveSystemMessage() {
+    var systemMessage = document.getElementById('system-message').value;
+    setCookie('systemMessage', systemMessage, 7); // Save for 7 days
+}
+
+// Function to load the value of system-message from a cookie
+function loadSystemMessage() {
+    var systemMessage = getCookie('systemMessage');
+    if (systemMessage) {
+        document.getElementById('system-message').value = systemMessage;
+    }
 }
