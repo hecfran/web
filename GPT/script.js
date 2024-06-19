@@ -15,7 +15,7 @@ function setCookie(name, value, days) {
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
     const expires = "; expires=" + date.toUTCString();
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    document.cookie = name + "=" + (value ? encodeURIComponent(value) : "") + expires + "; path=/";
 }
 
 // Function to get a cookie
@@ -25,7 +25,7 @@ function getCookie(name) {
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
     }
     return null;
 }
@@ -74,8 +74,8 @@ async function sendPrompt() {
     }
 
     if (!prompt){
-		prompt='.'
-	}
+        prompt='.'
+    }
 
     // Add system message if provided and not already added
     if (systemMessage && !systemMessageDisplayed) {
@@ -88,7 +88,7 @@ async function sendPrompt() {
         systemMessageDisplay.innerText = systemMessage;
         chatContainer.insertBefore(systemMessageDisplay, chatContainer.firstChild);
     }
-	systemMessageInput.style.display = 'none';  // Hide input box hid it anyway
+    systemMessageInput.style.display = 'none';  // Hide input box hid it anyway
 
     const userMessage = { role: 'user', content: prompt };
     addMessageToChat(userMessage, 'user-message');
@@ -282,7 +282,7 @@ function displayResponse(content, responseDiv, usage, model, duration) {
         tokenInfo.className = 'token-info';
 
         const cost = calculateCost(usage.prompt_tokens, usage.completion_tokens, model);
-		acumulatedcost = acumulatedcost + cost
+        acumulatedcost = acumulatedcost + cost
         if (cost > 0) {
             tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, model: ${model}, response cost: ${cost.toFixed(4)}c  acumulated cost: ${acumulatedcost.toFixed(2)}c`;
             copyBtnContainer.appendChild(tokenInfo);
@@ -307,7 +307,6 @@ function calculateCost(promptTokens, completionTokens, model) {
     }
     return cost; 
 }
-
 
 // Function to save the value of system-message in a cookie
 function saveSystemMessage() {
