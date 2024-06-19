@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Mnemonic System</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header>
+        <h1>Major Mnemonic System Generator</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Generate Mnemonic Sequences</h2>
+            <div>
+                <label for="api-key">API Key:</label>
+                <input type="text" id="api-key" placeholder="Enter your API key here">
+            </div>
+            <div>
+                <label for="number">Number:</label>
+                <input type="text" id="number" placeholder="Enter a positive number">
+            </div>
+            <div>
+                <label for="language">Language:</label>
+                <select id="language">
+                    <option value="English">English</option>
+                    <option value="Español">Español</option>
+                    <option value="Français">Français</option>
+                    <option value="Deutsch">Deutsch</option>
+                    <option value="한국어">한국어</option>
+                    <option value="日本語">日本語</option>
+                    <option value="Русский">Русский</option>
+                </select>
+            </div>
+            <button id="generate-btn">Generate Sequences</button>
+            <h3>Sequences:</h3>
+            <pre id="output"></pre>
+            <h3>Explanation:</h3>
+            <p id="explanation"></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Hector O'Franco - Major Mnemonic System</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
