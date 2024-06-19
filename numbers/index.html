@@ -4,45 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Major Mnemonic System</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css">  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        main {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #digits {
+            width: 80%; /* Smaller width for input field */
+        }
+        #output {
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Major Mnemonic System Generator</h1>
+        <h1>Major Mnemonic System</h1>
     </header>
     <main>
-        <section>
-            <h2>Generate Mnemonic Sequences</h2>
-            <div>
-                <label for="api-key">API Key:</label>
-                <input type="text" id="api-key" placeholder="Enter your API key here">
-            </div>
-            <div>
-                <label for="number">Number:</label>
-                <input type="text" id="number" placeholder="Enter a positive number">
-            </div>
-            <div>
-                <label for="language">Language:</label>
-                <select id="language">
-                    <option value="English">English</option>
-                    <option value="Español">Español</option>
-                    <option value="Français">Français</option>
-                    <option value="Deutsch">Deutsch</option>
-                    <option value="한국어">한국어</option>
-                    <option value="日本語">日本語</option>
-                    <option value="Русский">Русский</option>
-                </select>
-            </div>
-            <button id="generate-btn">Generate Sequences</button>
-            <h3>Sequences:</h3>
-            <pre id="output"></pre>
-            <h3>Explanation:</h3>
-            <p id="explanation"></p>
-        </section>
+        <div class="form-group">
+            <label for="language">Language:</label>
+            <select id="language">
+                <option value="English">English</option>
+                <option value="Español">Español</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="digits">Enter Digits:</label>
+            <input type="text" id="digits" placeholder="Enter a sequence of digits">
+        </div>
+        <button id="transcribe-btn">Transcribe</button>
+        <h3>Transcribed Sequence:</h3>
+        <div id="output"></div>
     </main>
     <footer>
         <p>&copy; 2024 Hector O'Franco - Major Mnemonic System</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="dictionaries.js"></script>
+    <script src="transcription.js"></script>
 </body>
 </html>

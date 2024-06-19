@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('generate-btn').addEventListener('click', generateSequences);
     document.getElementById('api-key').addEventListener('input', saveApiKey);
     document.getElementById('language').addEventListener('change', saveLanguage);
+    document.getElementById('number').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            generateSequences();
+        }
+    });
 });
 
 function setCookie(name, value, days) {
@@ -61,7 +66,22 @@ async function generateSequences() {
     const apiKey = document.getElementById('api-key').value;
     const number = document.getElementById('number').value;
     const language = document.getElementById('language').value;
-	const prompt = ` use the major nemonic system to create a sequence of words to codify the number ${number}, aim to use words that are nouns in the language: ${language}. after that create a sentence with the the words in order avoid adding more nouns`;
+	const prompt = `Use the Major Mnemonic System to create a sequence of words to codify the number ${number}. 
+	Ensure the words are nouns in ${language}. 
+	Remember to account for all consonants in the words and follow the Major Mnemonic System rules strictly: 
+    0: s, z
+    1: t, d
+    2: n
+    3: m
+    4: r
+    5: l
+    6: j, sh, ch
+    7: k, g
+    8: f, v
+    9: p, b. 
+	After proposing a word write by its side the digits that are encoded on that word, make sure all consonants are represented as digits.
+	Propose a sequence of words which nemonic represents the same sequence of numbers
+    `;
 
     const responseDiv = document.getElementById('output');
     responseDiv.innerText = 'Loading...';
