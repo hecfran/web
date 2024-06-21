@@ -103,7 +103,8 @@ footer p {
 
 table, th, td {
     border: 1px solid black; /* Black borders for the table */
-    text-align: center; /* Centers all text horizontally within cells */
+    /* text-align: center;  Centers all text horizontally within cells */
+	text-align: justify;
     padding: 10px; /* Adds padding to cells */
 }
 
@@ -114,4 +115,8 @@ td {
 .vertical-text {
     writing-mode: vertical-rl; /* Writes text vertically from right to left */
     text-orientation: mixed; /* Maintains horizontal orientation for numbers */
+}
+
+#portfolio table td, #demos table td {
+    text-align: justify;
 }
