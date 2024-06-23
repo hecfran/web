@@ -160,8 +160,8 @@ function calculateCost(model, inputChars, outputChars) {
         throw new Error('Unknown model selected');
     }
 
-    const totalInputCost = (inputChars / 100000) * inputCostPerK;
-    const totalOutputCost = (outputChars / 100000) * outputCostPerK;
+    const totalInputCost = (inputChars / 10000000) * inputCostPerK;
+    const totalOutputCost = (outputChars / 10000000) * outputCostPerK;
 
     return { totalInputCost, totalOutputCost, totalCost: totalInputCost + totalOutputCost };
 }
