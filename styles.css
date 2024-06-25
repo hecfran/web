@@ -9,7 +9,7 @@ body {
 }
 
 header {
-    background-color: rgba(76, 175, 80, 0.9); /* Slight transparency */
+	background-color: rgba(184, 134, 11, 0.7); /* Dark golden color with slight transparency */
     color: white;
     padding: 1rem 0;
     text-align: center;
@@ -82,7 +82,8 @@ a:hover {
 }
 
 footer {
-    background-color: rgba(76, 175, 80, 0.9); /* Slight transparency */
+    /*background-color: rgba(76, 175, 80, 0.9); /* Slight transparency */
+	background-color: rgba(184, 134, 11, 0.7);
     color: white;
     text-align: center;
     padding: 1rem 0;
@@ -113,10 +114,21 @@ td {
 }
 
 .vertical-text {
-    writing-mode: vertical-rl; /* Writes text vertically from right to left */
-    text-orientation: mixed; /* Maintains horizontal orientation for numbers */
+    writing-mode: vertical-rl;
+    /*text-orientation: mixed;
+    text-align: center;
+    vertical-align: middle;
+    /*display: table-cell;*/
+    height: auto;
+    padding: 100px; /* Adjust the padding as needed */
 }
 
-#portfolio table td, #demos table td {
+
+
+#demos table td {
     text-align: justify;
+}
+
+#portfolio table td {
+    text-align: left;
 }
