@@ -199,15 +199,31 @@
         <p>&copy; 2024 Hector O'Franco</p>
     </footer>
 
-    <script>
-        function showPanel(panelId) {
-            const panels = document.querySelectorAll('.content-panel');
-            panels.forEach(panel => {
-                panel.style.display = 'none';
-            });
-            document.getElementById(panelId).style.display = 'block';
-            document.title = document.querySelector(`a[onclick="showPanel('${panelId}')"]`).textContent + ' - Hector O\'Franco';
+<script>
+    // List of images stored in the 'img' folder
+    const images = ['img/background5.jpg','img/background5.jpg','img/background5.jpg', 'img/background4.jpg', 'img/gpt2.jpg', 'img/gpt1.jpg']; 
+	const randomImage = images[Math.floor(Math.random() * images.length)];
+	document.body.style.backgroundImage = `url("${randomImage}")`;
+    function showPanel(panelId) {
+        const panels = document.querySelectorAll('.content-panel');
+        panels.forEach(panel => {
+            panel.style.display = 'none';
+        });
+
+        document.getElementById(panelId).style.display = 'block';
+
+        // Change the background image based on the panel clicked
+        //if (panelId === 'demos') {
+        //    document.body.style.backgroundImage = 'url("img/background6.jpg")';
+        //} else {
+            
+            document.body.style.backgroundImage = `url("${randomImage}")`;
         }
-    </script>
+
+        // Update the document title
+        document.title = document.querySelector(`a[onclick="showPanel('${panelId}')"]`).textContent + ' - Hector O\'Franco';
+    }
+</script>
+
 </body>
 </html>
