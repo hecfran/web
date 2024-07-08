@@ -42,7 +42,7 @@ def extract_and_save_filtered_csv(gzip_path, csv_path, mode='a'):
         
         chunk_list = []
         chunk_size = 10**6  # 1 MB
-        for chunk in pd.read_csv(io.StringIO(f_in.read().decode('utf-8')), sep='\t', header=None, names=["Word", "Year", "Frequency", "Volumes"], chunksize=chunk_size):
+        for chunk in pd.read_csv(io.StringIO(f_in.read().decode('utf-8')), sep='\t', header=None, names=["Word", "Year", "Frequency", "Volumes"], chunksize=chunk_size, encoding='utf-8'):
             filtered_chunk = chunk[(chunk['Word'].str.endswith('_NOUN')) & (chunk['Year'] == 2009) & (chunk['Frequency'] > 3)]
             chunk_list.append(filtered_chunk[["Word", "Frequency"]])
             t.update(len(chunk))
@@ -52,7 +52,7 @@ def extract_and_save_filtered_csv(gzip_path, csv_path, mode='a'):
         filtered_df = pd.concat(chunk_list, ignore_index=True)
         
         # Save the filtered DataFrame to the CSV file
-        filtered_df.to_csv(csv_path, mode=mode, index=False, header=not os.path.exists(csv_path))
+        filtered_df.to_csv(csv_path, mode=mode, index=False, header=not os.path.exists(csv_path), encoding='utf-8')
     print(f"Filtered data extracted and saved to {csv_path}")
 
     # Remove the .gz file
@@ -61,8 +61,9 @@ def extract_and_save_filtered_csv(gzip_path, csv_path, mode='a'):
 
 # Download the 1-gram datasets for English and Spanish
 corpus_files = {
+    "spanish": "spa-all",
     "english": "eng-us-all",
-    "spanish": "spa-all"
+    
 }
 parts = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
@@ -70,8 +71,8 @@ save_dir = 'ngram_data'
 os.makedirs(save_dir, exist_ok=True)
 
 csv_paths = {
+    "spanish": os.path.join(save_dir, "ngram_spanish.csv"),
     "english": os.path.join(save_dir, "ngram_english.csv"),
-    "spanish": os.path.join(save_dir, "ngram_spanish.csv")
 }
 
 for language, corpus in corpus_files.items():
@@ -80,7 +81,8 @@ for language, corpus in corpus_files.items():
     if os.path.exists(csv_path):
         os.remove(csv_path)
     
-    for part in tqdm(parts, desc=f"Processing {language}"):
+    for part in tqdm(parts, desc=f"Processing letters for {language}"):
         save_path = os.path.join(save_dir, f"googlebooks-{corpus}-1gram-20120701-{part}.gz")
+        print(f"Processing leter {part} for {language}")
         download_ngram_data(corpus, part, save_path)
         extract_and_save_filtered_csv(save_path, csv_path, mode='a')
