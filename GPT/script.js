@@ -304,6 +304,8 @@ function calculateCost(promptTokens, completionTokens, model) {
         cost = ((promptTokens * 5 / 1000000) + (completionTokens * 15 / 1000000)) * 100;
     } else if (model === 'gpt-3.5-turbo') {
         cost = ((promptTokens * 0.5 / 1000000) + (completionTokens * 1.5 / 1000000)) * 100;
+	else if (model === 'gpt-4o-mini') {
+        cost = ((promptTokens * 0.15 / 1000000) + (completionTokens * 0.6 / 1000000)) * 100;		
     }
     return cost; 
 }
