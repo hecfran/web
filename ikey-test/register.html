@@ -80,19 +80,20 @@
           <span class="upload-label">Left Image</span>
           <img id="leftPreview" src="" alt="" style="display:none;">
           <span id="leftPlaceholder">Drag & drop or click to select</span>
-          <input type="file" accept="image/*" id="leftInput" class="file-input" required>
+          <input type="file" accept="image/*,.dcm" id="leftInput" class="file-input">
         </div>
         <div class="upload-box" id="rightBox">
           <span class="upload-label">Right Image</span>
           <img id="rightPreview" src="" alt="" style="display:none;">
           <span id="rightPlaceholder">Drag & drop or click to select</span>
-          <input type="file" accept="image/*" id="rightInput" class="file-input" required>
+          <input type="file" accept="image/*,.dcm" id="rightInput" class="file-input">
         </div>
       </div>
     </div>
     <div style="text-align:center;">
       <button type="submit">Submit</button>
     </div>
+    <div id="result" style="margin-top:1em;font-weight:bold;"></div>
   </form>
   <script src="register.js"></script>
 </body>
