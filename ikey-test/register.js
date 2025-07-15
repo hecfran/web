@@ -88,6 +88,36 @@ function fileToBase64(file) {
 document.getElementById('baselineForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
+  // Collect info fields for the info JSON object
+  const info = {
+    "Clinic/shop ID": document.getElementById('customerId').value.trim(),
+    "Customer/Patient ID": document.getElementById('patientId').value.trim(),
+    "Ethnicity": (() => {
+      const selected = document.querySelector('input[name="ethnicity"]:checked');
+      if (selected) {
+        if (selected.value === "Other") {
+          return document.getElementById('ethnicityOther').value.trim();
+        }
+        return selected.value;
+      }
+      return "";
+    })(),
+    "History of glaucoma": (() => {
+      const selected = document.querySelector('input[name="glaucomaHistory"]:checked');
+      return selected ? selected.value : "";
+    })(),
+    "Family history of glaucoma": (() => {
+      const selected = document.querySelector('input[name="familyGlaucoma"]:checked');
+      return selected ? selected.value : "";
+    })(),
+    "Diabetes": (() => {
+      const selected = document.querySelector('input[name="diabetes"]:checked');
+      return selected ? selected.value : "";
+    })(),
+    "Date of birth": document.getElementById('dob').value
+  };
+
+  // Collect fields for patient lookup
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
   const idCard = document.getElementById('idCard').value.trim();
@@ -122,7 +152,8 @@ document.getElementById('baselineForm').addEventListener('submit', async functio
   const payload = {
     action: "set_baseline",
     fields: fields,
-    values: values
+    values: values,
+    info: info
   };
   if (image1) payload.image1 = image1;
   if (image2) payload.image2 = image2;
