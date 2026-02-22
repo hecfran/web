@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hector O'Franco - A.I. Consultant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="img/logo.png" type="image/png">
+    <style>
+        .content-panel table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .content-panel th, .content-panel td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        .content-panel .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+    </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M3TV3Z6VV7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M3TV3Z6VV7');
+</script>
+<body>
+    <header>
+        <h1>Hector O'Franco: A.I. Consultant</h1>
+        <nav>
+            <a title="my biografy" href="#bio" onclick="showPanel('biography')">Home</a> |
+            <a title="Poftfolio of start-up experience"  href="#entrepreneurship" onclick="showPanel('portfolio')">Start-ups</a>|
+            <a title="Some online code to play with AI concepts, also public repositories of code and my doctoral thesis" href="#demo" onclick="showPanel('demos')">Demostrators</a>|           
+            <a title="Research publications" href="https://scholar.google.com/citations?user=U8fHdfwAAAAJ&hl=en">A.I. reserach</a>|
+			<!--a href="https://www.linkedin.com/in/ofrancophd/" title="You can find my personal reflections on my linked in articles at my profile">L-in</a>| -->
+			<a title="Articles I wrote and publish at my linkedin account about work issues" href="https://www.linkedin.com/in/ofrancophd/recent-activity/articles/"> Linkedin</a>			
+			
+
+        </nav>
+    </header>
+    <main>
+        <section id="biography" class="content-panel">
+            <h2>Biography</h2>
+            <img src="img/HectorFranco.jpg" alt="Hector Franco" class="intro-image">
+            <p>Hector O'Franco is a seasoned A.I. consultant with over a decade of experience in machine learning, data analytics, and computer vision. He has contributed to numerous innovative projects across diverse industries, including healthcare, agriculture, and insurance. Hector’s expertise lies in transforming complex data into actionable insights, driving technological advancements, and leading cross-functional teams to success. He holds a Ph.D. in Artificial Intelligence from Trinity College Dublin and has a passion for entrepreneurship, evident through his involvement in multiple start-ups.</p>
+            <p>As a software engineer with a Ph.D. in computer science, I have over six years of experience in image processing, data science, and artificial intelligence. I am passionate about analyzing human behavior through big data and developing innovative solutions that enhance user experience and satisfaction.</p>
+            <p>Find my personal articles at my <a href="https://www.linkedin.com/in/ofrancophd/recent-activity/articles/">professional blog</a></p>
+            <p>Many of you ask me about large language models with the latest hype in NLP, and what can be built with it. You can find here a <a href="GPT/index.html">toy chatGPT user interface</a> that works with your private chatgpt key and helps you to explore response time and costs for different models.</p>
+        </section>
+
+        <section id="portfolio" class="content-panel" style="display:none;">
+            <h2>Start-up Portfolio</h2>
+            <img src="img/image002.png" alt="entrepreneurship" class="intro-image">
+
+            <p class="title">Entrepreneurship quick and slow failures and successes:</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th title="Problems this start up aims to aliviate" > Problem </th>
+                        <th title="Proposed solution to the user" >Solution</th>
+                        <th title="Current state of the start-up" >Fate</th>
+                        <th class="vertical-text">Year</th>
+                    </tr>
+                    <tr>
+                        <td>Reducing costs for hiring</td>
+                        <td>Online platform to process CVs and conduct job interviews as first filter for shortlisting.<br><a href="https://www.onceover.ai/">www.onceover.ai</a></td>
+                        <td>Early stage</td>
+                        <td class="vertical-text">2024-*</td>
+                    </tr>					
+                    <tr>
+                        <td>Can you see the rainbow after the rain? Many people can't see it due to preventable blindness.</td>
+                        <td>iKey developed a non-invasive healh test based on image processing of retina images.<br> <a href="https://www.ikey.ie">www.iKey.ie</a></td>
+                        <td>Confidential information</td>
+                        <td class="vertical-text">2019-*</td>
+                    </tr>
+                    <tr>
+                        <td>Helping businesses to identify their best customers.</td>
+                        <td>LoyLap is a virtual loyalty card for payments.<br> <a href="https://www.loylap.com/">www.loylap.com</a></td>
+                        <td>The company is still trading.</td>
+                        <td class="vertical-text">2018-18 </td>
+                    </tr>
+                    <tr>
+                        <td>Business needs to identify their best and most influential customers to promote their business.</td>
+                        <td>Predictive analytics platform built in collaboration with Technological University of Dublin.</td>
+                        <td>Aborted due to difficulties collaborating with the public administration.</td>
+                        <td class="vertical-text">2017-18</td>
+                    </tr>
+                    <tr>
+                        <td>My own need for more social interaction.</td>
+                        <td>Opened a page on Airbnb to get experience dealing directly with clients and attending to their needs.</td>
+                        <td>I closed it and moved on. Not an exponential company but profitable and fun.</td>
+                        <td class="vertical-text">2015</td>
+                    </tr>
+                    <tr>
+                        <td>Difficulties getting a loan at a low-interest rate and P2P loans to friends.</td>
+                        <td>Crowdlending friends: funding is provided by a network of friends at increasing interest rates from further nodes.</td>
+                        <td>Difficulties testing the market and regulations.</td>
+                        <td class="vertical-text">2013</td>
+                    </tr>
+                    <tr>
+                        <td>Internet Of Things: communication between intelligent objects.</td>
+                        <td>Misakai: General library for broadcasting and filtering messages between devices. Backend as a service.</td>
+                        <td>Too difficult to work with the other founder, the company still exists without growth.</td>
+                        <td class="vertical-text">2013 *</td>
+                    </tr>
+                    <tr>
+                        <td>None.</td>
+                        <td>Contrastify: Search engine for public emotion on a keyword, based on sentiment analysis of tweets.</td>
+                        <td>Low usage.</td>
+                        <td class="vertical-text">2012</td>
+                    </tr>
+                    <tr>
+                        <td>Dificuties writing a poems</td>
+                        <td>A poem editor that assists in finding the rhyming word while encouraging the writer to write more through a chatbot, also to publish the poem and deliver it with other expensive goods.</td>
+                        <td>Abandoned due to technological NLP problems, excessive distraction from incubator advisors, and personal needs (finish the PhD).</td>
+                        <td class="vertical-text">2011</td>
+                    </tr>
+                    <tr>
+                        <td>Research workers need to prove what work they did and when to be able to stop patents from competitors, a document that can be used in court, among other needs for a research diary as an assistant tool.</td>
+                        <td>A digital lab notebook in which the company proves the submission times with timestamps, like a blockchain with no modifications of previous transactions.</td>
+                        <td>Abandoned due to the difficulties in identifying possible buyers. Research workers rarely want to be audited, and institutions are difficult to work with.</td>
+                        <td class="vertical-text">2009</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="demos" class="content-panel" style="display:none;">
+            <h2>Demostrators</h2>
+            <img src="img/man.jpg" alt="entrepreneurship" class="intro-image">
+
+            <!--table class="max-width-table"-->
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Link</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GPT Explorer <br> <a href="./GPT">v1</a> | <a href="./GPT2">v2</a> | <a href="./gemini">gemini</a> </td>
+                        <td>GPT Explorer helps you check and underestand how much are the chatgptGPT (openAI) costs for interaction and how quickly it responds to help you create the application you have in mind. Version 1 only lets you send one message at a time. In Version 2, you can send as many messages as you want. It's simple to use whether you have basic questions or need more detailed info. If you don't know what is system messages start using the version 1<BR> gemini explorer does the same for gemini LLM (google) the configuratin is very similar to chatgpt however gemini provides also ethical information about the interaction regarding probabilities for sex, hate speech, harassment or dangerous content. </td>
+                    </tr>
+					<tr>
+                        <td>Nemonic system<br><a href="./numbers">ruleBased</a> <br><a href="./numbersGPT">GPTBased</a></td>
+                        <td>The Number Mnemonic Generator is a tool that helps you turn numbers into memorable words or phrases using the Major Mnemonic System. This system changes digits into consonant sounds, which are then mixed with vowels to create easy-to-remember words. The app uses two methods: a traditional rule-based approach and an advanced AI-powered option. Both methods work in English and Spanish, making it useful for many people.<br>The generator quickly changes numbers into mnemonics, helping you remember things better and learn more efficiently. Whether you're a student, a professional, or just want to improve your memory, this tool provides a fast and effective way to remember numbers.
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td><a href="./GOL">Game of Life</a></td>
+                        <td>The Game of Life (devised by mathematician John Conway) is more than a mathematical curiosity; it is a powerful tool for understanding key concepts in artificial intelligence. By exploring emergent behavior, self-organization, parallel processing, and algorithm optimization through this simple game, future AI researchers and developers can gain valuable insights and skills that are essential for advancing the field.
+							<br>This game of zero playes consists of a grid of cells that evolve through a set of rules based on the states of neighboring cells. Despite its simplicity, the Game of Life demonstrates how complex patterns and behaviors can emerge from simple rules, mirroring how complexity in AI systems often arises from basic principles.							
+							<!--
+							<br>One significant aspect of the Game of Life is its illustration of emergent behavior. In AI, understanding how simple rules can lead to complex behaviors is crucial for developing systems that can learn and adapt. The game shows that even simple initial conditions and rules can produce unpredictable and intricate patterns, providing insights into how AI algorithms can evolve and improve over time.
+							<br>Additionally, the Game of Life is a valuable tool for studying self-organization. This concept is essential in AI, where systems often need to organize themselves without explicit external control. By observing how cells in the game organize into stable patterns or chaotic configurations, researchers can draw parallels to how AI systems might self-organize to solve problems or adapt to new environments.
+							<br>The Game of Life also encourages thinking about parallel processing. Each cell's state in the game is updated simultaneously based on its neighbors, similar to how AI systems might process multiple pieces of information at once. This parallelism is fundamental in AI, where tasks are often distributed across multiple processors to achieve faster and more efficient computations.
+							<br>Finally, working with the Game of Life helps develop skills in algorithm design and optimization. Creating efficient algorithms to simulate the game involves understanding and implementing rules in a way that can handle large grids and numerous iterations. These skills are directly applicable to developing AI algorithms that need to be both efficient and effective in processing large datasets.-->
+						</td>
+                    </tr>
+                    <tr>
+                        <td><a href="./Hanoi">Towers of Hanoi</a></td>
+                        <td>The Towers of Hanoi is an important puzzle in computer science because it helps develop several key skills. Firstly, it teaches problem-solving by demonstrating how to break down complex problems into simpler steps, a fundamental strategy in computer science. The puzzle is solved using recursion, a method where a function calls itself, which is crucial for many programming techniques.<br> Additionally, designing an algorithm to solve the Towers of Hanoi enhances skills in writing and optimizing code. It encourages computational thinking, promoting structured and logical approaches to problem-solving that are essential for writing efficient programs. Finally, solving the puzzle requires patience and careful planning, qualities that are vital for success in technology fields. In essence, the Towers of Hanoi is a great way to train future computer scientists in these essential areas.
+						</td>						
+						
+                    </tr>
+                    <tr>
+                        <td><a href="https://leetcode.com/u/francoph/">Leetcode </a></td>
+                        <td>Explore my LeetCode public profile to see a wide array of programming challenges I’ve solved. Each solution reflects my approach to problem-solving and demonstrates my ongoing commitment to refining my coding skills. These examples highlight my proficiency in tackling complex algorithms and my dedication to excellence in software development.
+						</td>												
+                    </tr>					
+
+                    <tr>
+                        <td><a href="https://github.com/hecfran">GitHub </a></td>
+                        <td> Explore my GitHub profile to discover a portfolio of public projects spanning various aspects of software development and data science. This collection showcases my technical expertise, from individual code snippets to comprehensive project repositories. Whether you are looking for inspiration, collaboration, or insight into my problem-solving approach, my GitHub account provides a window into some my ongoing professional interests.
+						</td>												
+                    </tr>					
+
+
+					<tr>
+                        <td><a href="https://bitbucket.org/hecfran/phd">My PhD thesis and source code </a></td>
+                        <td>Explore my doctoral research 2013 focused on enhancing Semantic Role Labeling using high-performance computing clusters, conducted at Trinity College Dublin. This thesis delves into advanced methodologies for processing natural language at scale, pushing the boundaries of accuracy and facilitating a deeper understanding of text. Access not only the thesis document but also the complete source code, which illustrates the practical application of these cutting-edge techniques. Ideal for enthusiasts and professionals interested in the intersection of machine learning, linguistics, and computing technology.<br>The thesis document is a good showcase for a coninious work methodology of reflecting about a data hipothesis first and then conducting an experiment trying to observer or disprove the hypotesis. 
+						</td>												
+                    </tr>	
+
+
+					
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Hector O'Franco</p>
+    </footer>
+
+<script>
+    // List of images stored in the 'img' folder
+    const images = ['img/background.jpg', 'img/background4.jpg', 'img/background5.jpg', 'img/background6.jpg', 'img/background7.jpg', 'img/background8.jpg', 'img/background9.jpg', 'img/background10.jpg', 'img/background11.jpg', 'img/background12.jpg', 'img/background13.jpg', 'img/background14.jpg', 'img/background15.jpg', 'img/background16.jpg', 'img/background17.jpg', 'img/background18.jpg', 'img/background19.jpg', 'img/background20.jpg', 'img/background21.jpg', 'img/background22.jpg', 'img/background23.jpg', 'img/background24.jpg', 'img/background25.jpg', 'img/background26.jpg', 'img/background27.jpg', 'img/background28.jpg', 'img/background29.jpg', 'img/background30.jpg', 'img/background31.jpg', 'img/background32.jpg', 'img/background33.jpg', 'img/background34.jpg', 'img/background35.jpg', 'img/background36.jpg', 'img/background37.jpg', 'img/background38.jpg', 'img/gpt1.jpg', 'img/gpt2.jpg'];
+
+    let randomImage = images[Math.floor(Math.random() * images.length)];
+    document.body.style.backgroundImage = `url("${randomImage}")`;
+
+    function showPanel(panelId) {
+        const panels = document.querySelectorAll('.content-panel');
+        panels.forEach(panel => {
+            panel.style.display = 'none';
+        });
+
+        document.getElementById(panelId).style.display = 'block';
+
+        
+        // Update the document title
+        document.title = document.querySelector(`a[onclick="showPanel('${panelId}')"]`).textContent + ' - Hector O\'Franco';
+    }
+</script>
+
+
+</body>
+</html>

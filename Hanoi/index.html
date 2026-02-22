@@ -3,130 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Towers of Hanoi</title>
-    <link rel="stylesheet" href="../styles.css">
+    <title>Towers of Hanoi — Hector O'Franco</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a1120;
+            --bg-card: rgba(14, 24, 42, 0.88);
+            --border: rgba(148, 163, 184, 0.12);
+            --primary: #6366f1;
+            --primary-l: #818cf8;
+            --accent: #06b6d4;
+            --text: #f1f5f9;
+            --text-sec: #94a3b8;
+            --muted: #64748b;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0; /* Removes default margin from body */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
         }
+
+        #bg-canvas {
+            position: fixed; inset: 0;
+            z-index: 0; opacity: 0.18; pointer-events: none;
+        }
+
+        header {
+            position: relative; z-index: 10;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(10, 17, 32, 0.95);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+        }
+
+        .header-brand { display: flex; align-items: center; gap: 10px; }
+
+        .header-logo {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.75rem; color: white;
+            text-decoration: none;
+        }
+
+        .header-title { font-size: 0.95rem; font-weight: 600; }
+        .header-meta  { font-size: 0.7rem; color: var(--muted); }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: var(--muted); font-size: 0.78rem; text-decoration: none;
+            padding: 5px 10px; border: 1px solid var(--border); border-radius: 8px;
+            transition: all .2s;
+        }
+        .back-link:hover { color: var(--primary-l); border-color: var(--primary); }
+
+        .badge {
+            display: inline-flex; align-items: center;
+            font-size: 0.7rem; font-weight: 600;
+            padding: 0.2rem 0.6rem; border-radius: 50px;
+            background: rgba(100,116,139,0.15); color: var(--muted);
+            border: 1px solid rgba(100,116,139,0.25);
+        }
+
+        main {
+            position: relative; z-index: 1;
+            flex: 1;
+            padding: 1.5rem 1rem 2rem;
+        }
+
         .container {
-            width: 80%;
+            max-width: 900px;
             margin: 0 auto;
-            padding-top: 50px; /* Adjusted padding to bring content closer to the header */
-			text-align: center;
+            text-align: center;
         }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .controls label { color: var(--text-sec); font-size: 0.9rem; }
+
+        #numDisks {
+            width: 180px;
+            accent-color: var(--primary);
+        }
+
+        #numDisksValue {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-l);
+            min-width: 2ch;
+        }
+
         .towers-container {
             display: flex;
             justify-content: space-around;
-            margin-top: 30px;
+            gap: 1rem;
+            margin: 0 auto 2rem;
+            max-width: 860px;
         }
+
         .tower {
-            width: 300px; /* Width doubled */
-            height: 440px; /* Height to accommodate up to 20 disks */
-            border: 2px solid #000;
+            flex: 1;
+            min-width: 80px;
+            max-width: 280px;
+            height: 440px;
+            border: 1px solid var(--border);
+            border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+            border-radius: 4px;
             position: relative;
+            background: rgba(14, 24, 42, 0.5);
         }
+
+        /* Central rod */
+        .tower::before {
+            content: '';
+            position: absolute;
+            left: 50%; top: 10px; bottom: 0;
+            width: 4px;
+            transform: translateX(-50%);
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 2px;
+        }
+
         .disk {
             position: absolute;
-            background-color: #3498db;
-            border: 1px solid #2980b9;
+            border-radius: 4px;
             box-sizing: border-box;
+            transition: background-color 0.3s;
         }
-        .extra-space {
-            height: 100px; /* Extra space to allow scrolling */
+
+        .info-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: left;
         }
+        .info-section h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text); }
+        .info-section p  { color: var(--text-sec); font-size: 0.88rem; line-height: 1.7; margin-bottom: 0.6rem; }
+        .info-section ol { color: var(--text-sec); font-size: 0.88rem; line-height: 1.8; padding-left: 1.25rem; }
+
+        footer {
+            position: relative; z-index: 1;
+            background: rgba(8,14,26,0.88);
+            border-top: 1px solid var(--border);
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        footer a { color: var(--muted); text-decoration: none; }
+        footer a:hover { color: var(--text); }
     </style>
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M3TV3Z6VV7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date()); gtag('config', 'G-M3TV3Z6VV7');
+</script>
 <body>
-    <header>
-        <h1>Hector O&apos;Franco - demo Towers of Hanoi</h1>
-    </header>
-<main>
-    <div class="container">        
+<canvas id="bg-canvas"></canvas>
 
-        <label for="numDisks">Number of Levels:</label>
-        <input type="range" id="numDisks" name="numDisks" min="1" max="20" value="5" onchange="startHanoi()">
-        <span id="numDisksValue">5</span>
+<header>
+    <div class="header-brand">
+        <a class="header-logo" href="../index.html" title="Home">HF</a>
+        <div>
+            <div class="header-title">Towers of Hanoi</div>
+            <div class="header-meta">Classic puzzle solver · animated · v2026</div>
+        </div>
+    </div>
+    <div style="display:flex;gap:.6rem;align-items:center;">
+        <span class="badge">2024</span>
+        <a class="back-link" href="../index.html">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            Home
+        </a>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="controls">
+            <label for="numDisks">Number of Disks:</label>
+            <input type="range" id="numDisks" name="numDisks" min="1" max="20" value="5" onchange="startHanoi()">
+            <span id="numDisksValue">5</span>
+        </div>
+
         <div class="towers-container">
             <div class="tower" id="tower1"></div>
             <div class="tower" id="tower2"></div>
             <div class="tower" id="tower3"></div>
         </div>
-    </div>
-	        <section>
-            <p>The Towers of Hanoi is a classic mathematical puzzle consisting of three rods and a number of disks of different sizes, which can slide onto any rod. The puzzle starts with the disks in a neat stack in ascending order of size on one rod, the smallest at the top, making a conical shape.</p>
-            <p>The objective of the puzzle is to move the entire stack to another rod, obeying the following simple rules:</p>
+
+        <div class="info-section">
+            <h2>How it works</h2>
+            <p>The Towers of Hanoi is a classic mathematical puzzle with three rods and disks of different sizes. The objective is to move the entire stack from rod 1 to rod 3, following these rules:</p>
             <ol>
                 <li>Only one disk can be moved at a time.</li>
-                <li>Each move consists of taking the upper disk from one of the stacks and placing it on top of another stack or on an empty rod.</li>
+                <li>Only the top disk of a stack may be moved.</li>
                 <li>No larger disk may be placed on top of a smaller disk.</li>
             </ol>
-            <p>Try adjusting the number of disks using the slider below to see the Towers of Hanoi in action!</p>
-        </section>
-    <div class="extra-space"></div> <!-- Adds extra space before the footer -->
+            <p>Adjust the slider to change the number of disks and watch the algorithm solve it step by step. A solution for <em>n</em> disks requires exactly 2ⁿ − 1 moves.</p>
+        </div>
+    </div>
 </main>
-    <footer>
-        <p>&copy; 2024 Hector O&apos;Franco</p>
-    </footer>
 
-    <script>
-        let towers = [[], [], []];
-        let numDisks = 5; // Default number of disks
-        let moves = [];
+<footer>
+    <p>&copy; 2024–2026 <a href="../index.html">Hector O'Franco</a></p>
+</footer>
 
-        function drawTowers() {
-            for (let i = 1; i <= 3; i++) {
-                const tower = document.getElementById('tower' + i);
-                tower.innerHTML = '';
-                towers[i-1].forEach((disk, index) => {
-                    const diskDiv = document.createElement('div');
-                    diskDiv.className = 'disk';
-                    diskDiv.style.width = (disk * 5) + '%';
-                    diskDiv.style.height = '20px';
-                    diskDiv.style.bottom = (index * 22) + 'px';
-                    diskDiv.style.left = 'calc(50% - ' + (disk * 2.5) + '%)';
-                    tower.appendChild(diskDiv);
-                });
-            }
+<!-- Calendar background -->
+<script>
+(function () {
+    const cv = document.getElementById('bg-canvas');
+    if (!cv) return;
+    const cx = cv.getContext('2d');
+    const C = 14, G = 3, S = C + G;
+    const GR = ['rgba(10,18,12,0)','rgba(8,36,20,.6)','rgba(6,52,28,.65)','rgba(12,72,36,.7)','rgba(20,90,44,.75)'];
+    let cols, rows, cells = [], W, H;
+    function resize() {
+        W = cv.width = window.innerWidth; H = cv.height = window.innerHeight;
+        cols = Math.ceil(W / S) + 2; rows = Math.ceil(H / S) + 2; cells = [];
+        for (let c = 0; c < cols; c++) for (let r = 0; r < rows; r++) {
+            const lv = Math.random() < .35 ? 0 : Math.floor(Math.random() * 4) + 1;
+            cells.push({ x: c * S, y: r * S, level: lv, op: Math.random() * .4 + .1, ph: Math.random() * Math.PI * 2, sp: .003 + Math.random() * .003 });
         }
+    }
+    function draw() {
+        cx.clearRect(0, 0, W, H);
+        cells.forEach(cell => {
+            let lv = cell.level, al = cell.op;
+            if (lv > 0) { cell.ph += cell.sp; al = Math.min(1, al + Math.sin(cell.ph) * .12); }
+            if (lv === 0) return;
+            cx.globalAlpha = al; cx.fillStyle = GR[lv]; cx.beginPath();
+            if (cx.roundRect) cx.roundRect(cell.x, cell.y, C, C, 2); else cx.rect(cell.x, cell.y, C, C);
+            cx.fill();
+        });
+        cx.globalAlpha = 1; requestAnimationFrame(draw);
+    }
+    resize(); draw(); window.addEventListener('resize', resize);
+})();
+</script>
 
-        function moveDisk(from, to) {
-            towers[to].push(towers[from].pop());
-            drawTowers();
-        }
+<!-- Hanoi logic (original, unchanged) -->
+<script>
+    let towers = [[], [], []];
+    let numDisks = 5;
+    let moves = [];
 
-        function hanoi(n, from, to, aux) {
-            if (n === 0) return;
-            hanoi(n - 1, from, aux, to);
-            moves.push([from, to]);
-            hanoi(n - 1, aux, to, from);
-        }
+    // Disk color palette — indigo to cyan gradient by size
+    function diskColor(diskSize, totalDisks) {
+        const t = (diskSize - 1) / Math.max(totalDisks - 1, 1);
+        const r = Math.round(99  + t * (6   - 99));
+        const g = Math.round(102 + t * (182 - 102));
+        const b = Math.round(241 + t * (212 - 241));
+        return `rgb(${r},${g},${b})`;
+    }
 
-        function animateHanoi() {
-            if (moves.length === 0) return;
-            const move = moves.shift();
-            moveDisk(move[0], move[1]);
-            setTimeout(animateHanoi, 1000);
+    function drawTowers() {
+        for (let i = 1; i <= 3; i++) {
+            const tower = document.getElementById('tower' + i);
+            tower.innerHTML = '';
+            towers[i-1].forEach((disk, index) => {
+                const diskDiv = document.createElement('div');
+                diskDiv.className = 'disk';
+                diskDiv.style.width = (disk * 4.5 + 5) + '%';
+                diskDiv.style.height = '18px';
+                diskDiv.style.bottom = (index * 20 + 4) + 'px';
+                diskDiv.style.left = 'calc(50% - ' + ((disk * 4.5 + 5) / 2) + '%)';
+                diskDiv.style.background = diskColor(disk, numDisks);
+                diskDiv.style.border = '1px solid rgba(255,255,255,0.15)';
+                tower.appendChild(diskDiv);
+            });
         }
+    }
 
-        function startHanoi() {
-            numDisks = parseInt(document.getElementById('numDisks').value);
-            towers = [[], [], []];
-            for (let i = numDisks; i >= 1; i--) {
-                towers[0].push(i);
-            }
-            moves = [];
-            drawTowers();
-            hanoi(numDisks, 0, 1, 2);
-            setTimeout(animateHanoi, 1000);
-            document.getElementById('numDisksValue').textContent = numDisks;
-        }
+    function moveDisk(from, to) {
+        towers[to].push(towers[from].pop());
+        drawTowers();
+    }
 
-        window.onload = function() {
-            startHanoi(); // Initialize with default value on page load
-        }
-    </script>
+    function hanoi(n, from, to, aux) {
+        if (n === 0) return;
+        hanoi(n - 1, from, aux, to);
+        moves.push([from, to]);
+        hanoi(n - 1, aux, to, from);
+    }
+
+    function animateHanoi() {
+        if (moves.length === 0) return;
+        const move = moves.shift();
+        moveDisk(move[0], move[1]);
+        setTimeout(animateHanoi, 1000);
+    }
+
+    function startHanoi() {
+        numDisks = parseInt(document.getElementById('numDisks').value);
+        towers = [[], [], []];
+        for (let i = numDisks; i >= 1; i--) towers[0].push(i);
+        moves = [];
+        drawTowers();
+        hanoi(numDisks, 0, 1, 2);
+        setTimeout(animateHanoi, 1000);
+        document.getElementById('numDisksValue').textContent = numDisks;
+    }
+
+    window.onload = function () { startHanoi(); };
+</script>
 </body>
 </html>

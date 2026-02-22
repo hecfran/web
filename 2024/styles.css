@@ -1,0 +1,135 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: url('img/background6.jpg') repeat;
+    background-size: cover;
+    color: #333;
+
+}
+
+header {
+	background-color: rgba(15, 15, 15, 0.7); /* Dark golden color with slight transparency */
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header nav a {
+    margin: 0 15px;
+    color: #fff;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px 20px 120px 20px; /* Adds padding to account for fixed header */
+}
+
+section {
+    background: rgba(255, 255, 255, 0.5); /* Slight transparency */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    text-align: justify; /* Justifies the text within the section */
+}
+
+.intro-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto 1.5rem;
+    width: 50%; /* Adjust this percentage to control the size relative to the text width */
+}
+
+ul {
+    list-style-type: disc;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+ul li {
+    margin: 0.5rem 0;
+}
+
+a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.form-container {
+    margin: 1.5rem 0;
+    max-width: 100%;
+}
+
+.form-container iframe {
+    width: 100%;
+    height: 500px; /* Adjust the height as needed */
+    border: none;
+}
+
+footer {
+    /*background-color: rgba(76, 175, 80, 0.9); /* Slight transparency */
+	background-color: rgba(15, 15, 15, 0.7);
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+.max-width-table {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+table, th, td {
+    border: 1px solid black; /* Black borders for the table */
+    /* text-align: center;  Centers all text horizontally within cells */
+	text-align: justify;
+    padding: 10px; /* Adds padding to cells */
+}
+
+td {
+    white-space: break-spaces; /* Ensures descriptions don't get cut off */
+}
+
+.vertical-text {
+    writing-mode: vertical-rl;
+    /*text-orientation: mixed;
+    text-align: center;
+    vertical-align: middle;
+    /*display: table-cell;*/
+    height: auto;
+    padding: 100px; /* Adjust the padding as needed */
+}
+
+
+
+#demos table td {
+    text-align: justify;
+}
+
+#portfolio table td {
+    text-align: left;
+}

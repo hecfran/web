@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Life</title>
+    <link rel="stylesheet" href="../styles.css">
+	
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        header, footer {
+            width: 100%;
+            text-align: center;
+            background-color: #000;
+            color: #fff;
+            padding: 1em 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Game Of Life</h1>
+    </header>
+    
+        <canvas id="gameCanvas"></canvas> <br>
+    <br>
+	<div>
+	<br>
+	<br>
+	</div>
+    <footer>
+        <p>&copy; 2024 Hector O&apos;Franco</p>
+    </footer>	
+	
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth * 0.99;
+        canvas.height = window.innerHeight * 10;
+
+        const rows = 200*10;
+        const cols = 200;
+        const resolution = canvas.width / cols;
+        let grid;
+
+        function createGrid() {
+            let arr = new Array(rows);
+            for (let i = 0; i < rows; i++) {
+                arr[i] = new Array(cols).fill(0).map(() => Math.random() > 0.5 ? 1 : 0);
+            }
+            return arr;
+        }
+
+        function drawGrid(grid) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    ctx.fillStyle = grid[i][j] ? 'black' : 'rgba(0, 0, 0, 0)';
+                    ctx.fillRect(j * resolution, i * resolution, resolution - 1, resolution - 1);
+                }
+            }
+        }
+
+        function nextGeneration(grid) {
+            const nextGrid = grid.map(arr => [...arr]);
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const neighbors = countLiveNeighbors(grid, i, j);
+                    if (grid[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
+                        nextGrid[i][j] = 0;
+                    } else if (grid[i][j] === 0 && neighbors === 3) {
+                        nextGrid[i][j] = 1;
+                    }
+                }
+            }
+
+            return nextGrid;
+        }
+
+        function countLiveNeighbors(grid, x, y) {
+            let count = 0;
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    const nx = x + i;
+                    const ny = y + j;
+                    if (i === 0 && j === 0) continue;
+                    if (nx >= 0 && nx < rows && ny >= 0 && ny < cols) {
+                        count += grid[nx][ny];
+                    }
+                }
+            }
+            return count;
+        }
+
+        function update() {
+            grid = nextGeneration(grid);
+            drawGrid(grid);
+            setTimeout(update, 1000); // Update every second
+        }
+
+        grid = createGrid();
+        drawGrid(grid);
+        setTimeout(update, 1000); // Start the update loop
+    </script>
+	
+</body>
+</html>

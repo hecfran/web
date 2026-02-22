@@ -3,29 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Frontend</title>
+    <title>Gemini API Explorer — Hector O'Franco</title>
+    <link rel="icon" href="../img/logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RXJ3R3P4BH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date()); gtag('config', 'G-RXJ3R3P4BH');
+</script>
 <body>
-    <header>
-        <h1 class="hover-title">Gemini API Explorer <span class="hover-info">Version 1.0, designed to explore chat interaction and costs with the Gemini API<br> &copy; 2024 Hector O'Franco</span></h1>
-    </header>
-    <div id="chat-container"></div>
-    <div id="input-container">
-        <input type="password" id="api-key" placeholder="Enter your API key here">
+<canvas id="bg-canvas"></canvas>
+
+<header>
+    <div class="header-brand">
+        <a class="header-logo" href="../index.html" title="Back to main site">HF</a>
+        <div>
+            <div class="header-title">Gemini API Explorer · Multi-turn</div>
+            <div class="header-meta">Google Gemini cost &amp; speed inspector · v2026 · &copy; Hector O'Franco</div>
+        </div>
+    </div>
+    <a class="back-link" href="../index.html">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Home
+    </a>
+</header>
+
+<div id="chat-container"></div>
+
+<div id="input-container">
+    <div class="input-row-1">
+        <input type="password" id="api-key" placeholder="Google AI API key (AIzaSy…)">
         <select id="model-select">
             <option value="gemini-1.5-pro">gemini-1.5-pro</option>
-            <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash ★</option>
             <option value="gemini-1.0-pro">gemini-1.0-pro</option>
         </select>
-        Temp:<input type="number" id="temperature" placeholder="Temperature (e.g., 0.7)" step="0.1" min="0" max="1">
-        <label for="streaming-checkbox">Stream:</label>
-        <input type="checkbox" id="streaming-checkbox">
-        <br>
-        <textarea id="user-message" rows="2" placeholder="Type your user message here..."></textarea>
-        <textarea id="instructions" rows="2" placeholder="Type your model message here..."></textarea>
-        <button id="send-btn"><i class="fas fa-arrow-up"></i> Send</button>
+        <div class="label-input">
+            <label for="temperature">Temp</label>
+            <input type="number" id="temperature" placeholder="0.7" step="0.1" min="0" max="1" value="0.7">
+        </div>
+        <label class="toggle-label">
+            <input type="checkbox" id="streaming-checkbox">
+            Stream
+        </label>
     </div>
-    <script src="script.js"></script>
+    <div class="input-row-2">
+        <div class="textarea-stack">
+            <textarea id="user-message" rows="2" placeholder="User message…"></textarea>
+            <textarea id="model-message" rows="2" placeholder="Model / system instructions (optional)…"></textarea>
+        </div>
+        <button id="send-btn" title="Send">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+    </div>
+    <div id="cost-bar">
+        <span class="cost-item">Session cost: <span class="cost-val" id="total-cost-display">$0.0000</span></span>
+        <span class="cost-item" id="model-info-bar">gemini-1.5-flash · tiered pricing</span>
+    </div>
+</div>
+
+<!-- Calendar background animation -->
+<script>
+(function () {
+  const cv = document.getElementById('bg-canvas');
+  if (!cv) return;
+  const cx = cv.getContext('2d');
+  const C = 14, G = 3, S = C + G;
+  const GR = [
+    'rgba(10, 18, 12, 0.0)',
+    'rgba(8, 36, 20, 0.6)',
+    'rgba(6, 52, 28, 0.65)',
+    'rgba(12, 72, 36, 0.7)',
+    'rgba(20, 90, 44, 0.75)'
+  ];
+  let cols, rows, cells = [], W, H;
+  function resize() {
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+    cols = Math.ceil(W / S) + 2;
+    rows = Math.ceil(H / S) + 2;
+    cells = [];
+    for (let c = 0; c < cols; c++) for (let r = 0; r < rows; r++) {
+      const lv = Math.random() < 0.35 ? 0 : Math.floor(Math.random() * 4) + 1;
+      cells.push({ x: c * S, y: r * S, level: lv, op: Math.random() * 0.4 + 0.1, ph: Math.random() * Math.PI * 2, sp: 0.003 + Math.random() * 0.003 });
+    }
+  }
+  function draw() {
+    cx.clearRect(0, 0, W, H);
+    cells.forEach(cell => {
+      let lv = cell.level, al = cell.op;
+      if (lv > 0) { cell.ph += cell.sp; al = Math.min(1, al + Math.sin(cell.ph) * 0.12); }
+      if (lv === 0) return;
+      cx.globalAlpha = al; cx.fillStyle = GR[lv]; cx.beginPath();
+      if (cx.roundRect) cx.roundRect(cell.x, cell.y, C, C, 2); else cx.rect(cell.x, cell.y, C, C);
+      cx.fill();
+    });
+    cx.globalAlpha = 1; requestAnimationFrame(draw);
+  }
+  resize(); draw(); window.addEventListener('resize', resize);
+})();
+
+// Update model info bar on change
+document.addEventListener('DOMContentLoaded', () => {
+  const sel = document.getElementById('model-select');
+  const bar = document.getElementById('model-info-bar');
+  if (sel && bar) {
+    sel.addEventListener('change', () => { bar.textContent = sel.value + ' · tiered pricing'; });
+  }
+  // Patch accumulated cost display
+  const origDisplay = window.displayResponse;
+});
+</script>
+
+<script src="script.js"></script>
 </body>
 </html>

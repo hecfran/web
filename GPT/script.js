@@ -1,331 +1,326 @@
-const systemMessageInput = document.getElementById('system-message');
-const apiKeyInput = document.getElementById('api-key');
-const promptInput = document.getElementById('prompt');
-const modelSelect = document.getElementById('model-select');
-const temperatureInput = document.getElementById('temperature');
-const sendBtn = document.getElementById('send-btn');
-const chatContainer = document.getElementById('chat-container');
-const streamingCheckbox = document.getElementById('streaming-checkbox');
+/* ============================================
+   GPT Explorer v2026 — script.js
+   Upgraded: new models, better UI, cost tracking
+   ============================================ */
+
+/* ---- MODEL CATALOGUE (Feb 2026 pricing) ---- */
+const MODELS = [
+  { id: 'gpt-4o',          label: 'gpt-4o',           in: 2.50,  out: 10.00 },
+  { id: 'gpt-4o-mini',     label: 'gpt-4o-mini ★',    in: 0.15,  out: 0.60  },
+  { id: 'o1',              label: 'o1 (reasoning)',    in: 15.00, out: 60.00 },
+  { id: 'o1-mini',         label: 'o1-mini',           in: 1.10,  out: 4.40  },
+  { id: 'o3-mini',         label: 'o3-mini (new)',     in: 1.10,  out: 4.40  },
+  { id: 'gpt-4-turbo',     label: 'gpt-4-turbo',      in: 10.00, out: 30.00 },
+  { id: 'gpt-4',           label: 'gpt-4 (classic)',   in: 30.00, out: 60.00 },
+  { id: 'gpt-3.5-turbo',   label: 'gpt-3.5-turbo',    in: 0.50,  out: 1.50  },
+];
+
+/* ---- DOM REFS ---- */
+const systemMsgEl   = document.getElementById('system-message');
+const apiKeyEl      = document.getElementById('api-key');
+const promptEl      = document.getElementById('prompt');
+const modelSel      = document.getElementById('model-select');
+const tempEl        = document.getElementById('temperature');
+const sendBtn       = document.getElementById('send-btn');
+const chatEl        = document.getElementById('chat-container');
+const streamChk     = document.getElementById('streaming-checkbox');
+const totalCostEl   = document.getElementById('total-cost');
+const modelPriceEl  = document.getElementById('model-pricing');
+const msgCountEl    = document.getElementById('msg-count');
+
 let conversation = [];
-let systemMessageDisplayed = false;
-var acumulatedcost = 0
+let systemMessageLocked = false;
+let accumulatedCost = 0;
+let msgCount = 0;
 
-// Function to set a cookie
+/* ---- BUILD MODEL SELECTOR ---- */
+function buildModelSelector() {
+  MODELS.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.label;
+    modelSel.appendChild(opt);
+  });
+  updatePricingLabel();
+}
+
+/* Models that do NOT support temperature parameter */
+const NO_TEMP_MODELS = new Set(['o1', 'o1-mini', 'o3-mini']);
+
+function updatePricingLabel() {
+  const m = MODELS.find(x => x.id === modelSel.value);
+  if (m) modelPriceEl.textContent = `$${m.in}/$${m.out} per 1M tokens`;
+  // Disable temperature for reasoning models
+  const noTemp = NO_TEMP_MODELS.has(modelSel.value);
+  tempEl.disabled = noTemp;
+  tempEl.title = noTemp ? 'Temperature not supported for this model' : '';
+  tempEl.style.opacity = noTemp ? '0.4' : '1';
+  const tempLabel = tempEl.closest('.label-input')?.querySelector('label');
+  if (tempLabel) tempLabel.style.opacity = noTemp ? '0.4' : '1';
+}
+
+/* ---- CALENDAR BACKGROUND ---- */
+(function() {
+  const cv = document.getElementById('bg-canvas');
+  if (!cv) return;
+  const cx = cv.getContext('2d');
+  const C=14,G=3,S=C+G;
+  const GR=['rgba(22,27,34,0)','rgba(14,68,41,.7)','rgba(0,109,50,.8)','rgba(38,166,65,.9)','rgba(57,211,83,1)'];
+  let cols,rows,cells=[],streaks=[],W,H,frame=0;
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;cols=Math.ceil(W/S)+2;rows=Math.ceil(H/S)+2;buildCells();buildStreaks();}
+  function buildCells(){cells=[];for(let c=0;c<cols;c++)for(let r=0;r<rows;r++)cells.push({x:c*S,y:r*S,level:Math.random()<.35?0:Math.floor(Math.random()*4)+1,op:Math.random()*.4+.1,ph:Math.random()*Math.PI*2,sp:.003+Math.random()*.004,col:c,row:r});}
+  function buildStreaks(){streaks=[];for(let c=0;c<cols;c++)streaks.push({col:c,row:Math.random()*rows,speed:.04+Math.random()*.12,len:4+Math.floor(Math.random()*8),active:Math.random()<.6});}
+  function draw(){
+    cx.clearRect(0,0,W,H);frame++;
+    if(frame%120===0)streaks.forEach(s=>{if(!s.active&&Math.random()<.3){s.active=true;s.row=-s.len;s.speed=.04+Math.random()*.12;}});
+    streaks.forEach(s=>{if(s.active){s.row+=s.speed;if(s.row>rows+s.len)s.active=false;}});
+    const sm={};streaks.forEach(s=>{if(s.active)sm[s.col]=s.row;});
+    cells.forEach(cell=>{
+      let lv=cell.level,al=cell.op;
+      const sk=sm[cell.col];
+      if(sk!==undefined){const d=sk-cell.row;const tail=cell.col%3===0?12:8;if(d>=0&&d<tail){const t=1-d/tail;if(d<1.5){lv=4;al=1;}else{lv=Math.max(lv,Math.round(t*4));al=Math.max(al,t*.9);}}}
+      if(lv>0){cell.ph+=cell.sp;al=Math.min(1,al+Math.sin(cell.ph)*.15);}
+      cx.globalAlpha=al;cx.fillStyle=GR[lv];cx.beginPath();cx.roundRect(cell.x,cell.y,C,C,2);cx.fill();
+    });
+    cx.globalAlpha=1;requestAnimationFrame(draw);
+  }
+  resize();draw();window.addEventListener('resize',resize);
+})();
+
+/* ---- COOKIES ---- */
 function setCookie(name, value, days) {
-    const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    const expires = "; expires=" + date.toUTCString();
-    document.cookie = name + "=" + (value ? encodeURIComponent(value) : "") + expires + "; path=/";
+  const d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000);
+  document.cookie = name+'='+(value?encodeURIComponent(value):'')+'; expires='+d.toUTCString()+'; path=/';
 }
-
-// Function to get a cookie
 function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-    }
-    return null;
+  const eq = name+'=', ca = document.cookie.split(';');
+  for (let c of ca) {
+    c = c.trim();
+    if (c.indexOf(eq)===0) return decodeURIComponent(c.substring(eq.length));
+  }
+  return null;
 }
 
-// Retrieve API key from cookie on page load
+/* ---- INIT ---- */
 document.addEventListener('DOMContentLoaded', () => {
-    const savedApiKey = getCookie('apiKey');
-    apiKeyInput.value = savedApiKey || '';
-    apiKeyInput.placeholder = savedApiKey ? '' : 'Write your API key here';
-    addInitialMessage();
+  buildModelSelector();
+  const savedKey = getCookie('gpt_apiKey');
+  if (savedKey) { apiKeyEl.value = savedKey; apiKeyEl.placeholder = 'API key saved'; }
+  const savedSys = getCookie('gpt_systemMsg');
+  if (savedSys) systemMsgEl.value = savedSys;
+  addBotMessage('Enter your OpenAI API key below, set an optional system prompt, then type your first message.');
 });
 
-// Save API key when input changes
-apiKeyInput.addEventListener('input', () => {
-    setCookie('apiKey', apiKeyInput.value, 7); // Save for 7 days
-});
+apiKeyEl.addEventListener('input', () => setCookie('gpt_apiKey', apiKeyEl.value, 14));
+systemMsgEl.addEventListener('input', () => setCookie('gpt_systemMsg', systemMsgEl.value, 14));
+modelSel.addEventListener('change', updatePricingLabel);
 
-promptInput.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        sendPrompt();
-    }
+promptEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendPrompt(); }
 });
-
 sendBtn.addEventListener('click', sendPrompt);
 
-function addInitialMessage() {
-    const initialMessage = document.createElement('div');
-    initialMessage.className = 'message bot-message';
-    initialMessage.innerText = 'Please write your private OpenAI key at the bottom left field to use this page.';
-    initialMessage.id = 'initial-message';
-    chatContainer.appendChild(initialMessage);
-}
-
+/* ---- SEND ---- */
 async function sendPrompt() {
-    const apiKey = apiKeyInput.value.trim();
-    var prompt = promptInput.value.trim();
-    const model = modelSelect.value;
-    const temperature = parseFloat(temperatureInput.value.trim());
-    const streamingEnabled = streamingCheckbox.checked;
-    const systemMessage = systemMessageInput.value.trim();
+  const apiKey = apiKeyEl.value.trim();
+  const prompt = promptEl.value.trim() || '.';
+  const model  = modelSel.value;
+  const temp   = parseFloat(tempEl.value) || 0.7;
+  const stream = streamChk.checked;
+  const sysMsg = systemMsgEl.value.trim();
 
-    if (!apiKey) {
-        alert('API key is required.');
-        return;
-    }
+  if (!apiKey) { showAlert('Please enter your OpenAI API key.'); return; }
+  // Check if temperature is supported for selected model
+  const useTemp = !NO_TEMP_MODELS.has(model);
 
-    if (!prompt){
-        prompt='.'
-    }
+  // Lock system message on first send
+  if (sysMsg && !systemMessageLocked) {
+    conversation.unshift({ role: 'system', content: sysMsg });
+    systemMessageLocked = true;
+    systemMsgEl.style.display = 'none';
+    addSystemBubble(sysMsg);
+  } else if (!systemMessageLocked) {
+    systemMsgEl.style.display = 'none';
+  }
 
-    // Add system message if provided and not already added
-    if (systemMessage && !systemMessageDisplayed) {
-        const systemMessageObj = { role: 'system', content: systemMessage };
-        conversation.unshift(systemMessageObj);
-        systemMessageDisplayed = true;
-        systemMessageInput.style.display = 'none';  // Hide input box
-        const systemMessageDisplay = document.createElement('div');
-        systemMessageDisplay.className = 'system-message';
-        systemMessageDisplay.innerText = systemMessage;
-        chatContainer.insertBefore(systemMessageDisplay, chatContainer.firstChild);
-    }
-    systemMessageInput.style.display = 'none';  // Hide input box hid it anyway
+  addUserBubble(prompt);
+  conversation.push({ role: 'user', content: prompt });
+  promptEl.value = '';
 
-    const userMessage = { role: 'user', content: prompt };
-    addMessageToChat(userMessage, 'user-message');
-    conversation.push(userMessage);
-    promptInput.value = '';
+  const responseDiv = addBotMessage('…');
+  chatEl.scrollTop = chatEl.scrollHeight;
 
-    const responseDiv = document.createElement('div');
-    responseDiv.className = 'message bot-message';
-    responseDiv.innerText = 'Loading...';
-    chatContainer.appendChild(responseDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  const t0 = Date.now();
 
-    const startTime = Date.now();
-
-    if (streamingEnabled) {
-        try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: model,
-                    messages: conversation,
-                    temperature: temperature,
-                    stream: true
-                })
-            });
-
-            if (!response.body) throw new Error('No response body');
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let content = '';
-            let promptTokens = 0;
-            let completionTokens = 0;
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                const chunk = decoder.decode(value, { stream: true });
-
-                // Split the chunk into individual data events
-                const dataEvents = chunk.split('\n\n').filter(Boolean);
-
-                for (const dataEvent of dataEvents) {
-                    if (dataEvent.trim() === 'data: [DONE]') {
-                        // End of stream
-                        const endTime = Date.now();
-                        const duration = ((endTime - startTime) / 1000).toFixed(2);
-                        const botMessage = { role: 'assistant', content: content };
-                        conversation.push(botMessage);
-                        displayResponse(content, responseDiv, { prompt_tokens: promptTokens, completion_tokens: completionTokens }, model, duration);
-                        const initialMessage = document.getElementById('initial-message');
-                        if (initialMessage) initialMessage.remove();
-                        return;
-                    }
-
-                    if (dataEvent.startsWith('data:')) {
-                        const data = JSON.parse(dataEvent.slice(5)); // Remove 'data:'
-                        const chunkContent = data.choices[0].delta.content || '';
-                        content += chunkContent;
-                        responseDiv.innerText = content;
-                        chatContainer.scrollTop = chatContainer.scrollHeight;
-
-                        if (data.usage) {
-                            promptTokens = data.usage.prompt_tokens;
-                            completionTokens = data.usage.completion_tokens;
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            responseDiv.innerText = 'Error: ' + error.message;
-        }
-    } else {
-        try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: model,
-                    messages: conversation,
-                    temperature: temperature
-                })
-            });
-
-            const endTime = Date.now();
-            const duration = ((endTime - startTime) / 1000).toFixed(2);
-
-            const data = await response.json();
-            if (response.ok) {
-                const botMessage = { role: 'assistant', content: data.choices[0].message.content };
-                conversation.push(botMessage);
-                displayResponse(botMessage.content, responseDiv, data.usage, model, duration);
-                const initialMessage = document.getElementById('initial-message');
-                if (initialMessage) initialMessage.remove();
-            } else {
-                responseDiv.innerText = 'Error: ' + (data.error.message || 'Unknown error');
-            }
-        } catch (error) {
-            responseDiv.innerText = 'Error: ' + error.message;
-        }
-    }
+  if (stream) {
+    await streamResponse(apiKey, model, temp, responseDiv, t0);
+  } else {
+    await fetchResponse(apiKey, model, temp, responseDiv, t0);
+  }
 }
 
-function addMessageToChat(message, className) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message ' + className;
-    messageDiv.innerText = message.content;
-    chatContainer.appendChild(messageDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-function displayResponse(content, responseDiv, usage, model, duration) {
-    responseDiv.innerHTML = ''; // Clear loading text
-    const originalContent = content;
-    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-    const boldTextRegex = /\*\*(.*?)\*\*/g;
-    let lastIndex = 0;
-    let match;
-
-    while ((match = codeBlockRegex.exec(content)) !== null) {
-        const beforeCode = content.substring(lastIndex, match.index);
-        const code = match[2];
-
-        if (beforeCode) {
-            responseDiv.appendChild(document.createTextNode(beforeCode.replace(boldTextRegex, '<strong>$1</strong>')));
-            responseDiv.appendChild(document.createElement('br'));
-        }
-
-        const codeElement = document.createElement('div');
-        codeElement.className = 'code-block';
-
-        const preElement = document.createElement('pre');
-        preElement.textContent = code;
-
-        codeElement.appendChild(preElement);
-        responseDiv.appendChild(codeElement);
-
-        // Add a copy button under the code block
-        const copyBtnContainer = document.createElement('div');
-        copyBtnContainer.className = 'copy-btn-container';
-
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'copy-btn';
-        copyBtn.innerText = 'Copy';
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(code).then(() => {
-                copyBtn.innerText = 'Copied!';
-                setTimeout(() => {
-                    copyBtn.innerText = 'Copy';
-                }, 2000);
-            });
-        });
-        copyBtnContainer.appendChild(copyBtn);
-
-        responseDiv.appendChild(copyBtnContainer);
-
-        lastIndex = codeBlockRegex.lastIndex;
-    }
-
-    if (lastIndex < content.length) {
-        const remainingText = content.substring(lastIndex).replace(boldTextRegex, '<strong>$1</strong>').replace(/\n/g, '<br>');
-        responseDiv.innerHTML += remainingText;
-    }
-
-    // Add a copy button under the response
-    const copyBtnContainer = document.createElement('div');
-    copyBtnContainer.className = 'copy-btn-container';
-
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'copy-btn';
-    copyBtn.innerText = 'Copy';
-    copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(originalContent).then(() => {
-            copyBtn.innerText = 'Copied!';
-            setTimeout(() => {
-                copyBtn.innerText = 'Copy';
-            }, 2000);
-        });
+/* ---- FETCH (non-streaming) ---- */
+async function fetchResponse(apiKey, model, temp, responseDiv, t0) {
+  try {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({ model, messages: conversation, ...(useTemp && { temperature: temp }) })
     });
-    copyBtnContainer.appendChild(copyBtn);
+    const duration = ((Date.now() - t0) / 1000).toFixed(2);
+    const data = await res.json();
+    if (res.ok) {
+      const botMsg = data.choices[0].message.content;
+      conversation.push({ role: 'assistant', content: botMsg });
+      renderBotContent(botMsg, responseDiv, data.usage, model, duration);
+      msgCount++; msgCountEl.textContent = msgCount;
+    } else {
+      responseDiv.textContent = 'Error: ' + (data.error?.message || 'Unknown error');
+      responseDiv.style.color = '#f87171';
+    }
+  } catch (e) {
+    responseDiv.textContent = 'Network error: ' + e.message;
+    responseDiv.style.color = '#f87171';
+  }
+}
 
-    if (usage && (usage.prompt_tokens > 0 || usage.completion_tokens > 0)) {
-        const tokenInfo = document.createElement('div');
-        tokenInfo.className = 'token-info';
+/* ---- STREAM ---- */
+async function streamResponse(apiKey, model, temp, responseDiv, t0) {
+  try {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({ model, messages: conversation, ...(useTemp && { temperature: temp }), stream: true })
+    });
+    if (!res.body) throw new Error('No response body');
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let content = '', pTokens = 0, cTokens = 0;
 
-        const cost = calculateCost(usage.prompt_tokens, usage.completion_tokens, model);
-        acumulatedcost = acumulatedcost + cost
-        if (cost > 0) {
-            tokenInfo.innerText = `Time: ${duration}s, Prompt tokens: ${usage.prompt_tokens}, Completion tokens: ${usage.completion_tokens}, model: ${model}, response cost: ${cost.toFixed(4)}c  acumulated cost: ${acumulatedcost.toFixed(2)}c`;
-            copyBtnContainer.appendChild(tokenInfo);
+    responseDiv.textContent = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunks = decoder.decode(value, { stream: true }).split('\n\n').filter(Boolean);
+      for (const chunk of chunks) {
+        if (chunk.trim() === 'data: [DONE]') {
+          const duration = ((Date.now() - t0) / 1000).toFixed(2);
+          conversation.push({ role: 'assistant', content });
+          renderBotContent(content, responseDiv, { prompt_tokens: pTokens, completion_tokens: cTokens }, model, duration);
+          msgCount++; msgCountEl.textContent = msgCount;
+          return;
         }
+        if (chunk.startsWith('data:')) {
+          try {
+            const parsed = JSON.parse(chunk.slice(5));
+            content += parsed.choices[0].delta.content || '';
+            responseDiv.textContent = content;
+            if (parsed.usage) { pTokens = parsed.usage.prompt_tokens; cTokens = parsed.usage.completion_tokens; }
+            chatEl.scrollTop = chatEl.scrollHeight;
+          } catch {}
+        }
+      }
     }
-
-    responseDiv.appendChild(copyBtnContainer);
-
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  } catch (e) {
+    responseDiv.textContent = 'Stream error: ' + e.message;
+    responseDiv.style.color = '#f87171';
+  }
 }
 
-function calculateCost(promptTokens, completionTokens, model) {
-    let cost = 0;
-    if (model === 'gpt-4') {
-        cost = ((promptTokens * 30 / 1000000) + (completionTokens * 60 / 1000000)) * 100;
-    } else if (model === 'gpt-4-turbo') {
-        cost = ((promptTokens * 10 / 1000000) + (completionTokens * 30 / 1000000)) * 100;
-    } else if (model === 'gpt-4o') {
-        cost = ((promptTokens * 5 / 1000000) + (completionTokens * 15 / 1000000)) * 100;
-    } else if (model === 'gpt-3.5-turbo') {
-        cost = ((promptTokens * 0.5 / 1000000) + (completionTokens * 1.5 / 1000000)) * 100;
-	else if (model === 'gpt-4o-mini') {
-        cost = ((promptTokens * 0.15 / 1000000) + (completionTokens * 0.6 / 1000000)) * 100;		
-    }
-    return cost; 
+/* ---- RENDER CONTENT ---- */
+function renderBotContent(content, div, usage, model, duration) {
+  div.innerHTML = '';
+  const boldRe = /\*\*(.*?)\*\*/g;
+  const codeRe = /```(\w+)?\n?([\s\S]*?)```/g;
+  let last = 0, match;
+
+  while ((match = codeRe.exec(content)) !== null) {
+    const before = content.substring(last, match.index);
+    if (before) appendText(div, before, boldRe);
+
+    const block = document.createElement('div');
+    block.className = 'code-block';
+    const pre = document.createElement('pre');
+    pre.textContent = match[2];
+    block.appendChild(pre);
+    div.appendChild(block);
+
+    appendCopyBtn(div, match[2]);
+    last = codeRe.lastIndex;
+  }
+
+  const remaining = content.substring(last);
+  if (remaining) appendText(div, remaining, boldRe);
+
+  // Stats row
+  if (usage && (usage.prompt_tokens > 0 || usage.completion_tokens > 0)) {
+    const cost = calcCost(usage.prompt_tokens, usage.completion_tokens, model);
+    accumulatedCost += cost;
+    totalCostEl.textContent = '$' + accumulatedCost.toFixed(4);
+
+    const info = document.createElement('div');
+    info.className = 'token-info';
+    info.textContent = `⏱ ${duration}s · ↑${usage.prompt_tokens} ↓${usage.completion_tokens} tokens · $${cost.toFixed(5)} · total $${accumulatedCost.toFixed(4)}`;
+    div.appendChild(info);
+  }
+
+  appendCopyBtn(div, content, 'Copy all');
+  chatEl.scrollTop = chatEl.scrollHeight;
 }
 
-// Function to save the value of system-message in a cookie
-function saveSystemMessage() {
-    var systemMessage = document.getElementById('system-message').value;
-    setCookie('systemMessage', systemMessage, 7); // Save for 7 days
+function appendText(parent, text, boldRe) {
+  const span = document.createElement('span');
+  span.innerHTML = text.replace(boldRe, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  parent.appendChild(span);
 }
 
-// Function to load the value of system-message from a cookie
-function loadSystemMessage() {
-    var systemMessage = getCookie('systemMessage');
-    if (systemMessage) {
-        document.getElementById('system-message').value = systemMessage;
-    }
+function appendCopyBtn(parent, text, label = 'Copy') {
+  const wrap = document.createElement('div');
+  wrap.className = 'copy-btn-container';
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = label;
+  btn.onclick = () => navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = label, 2000);
+  });
+  wrap.appendChild(btn);
+  parent.appendChild(wrap);
 }
 
-// Set up event listeners
-document.addEventListener('DOMContentLoaded', function () {
-    loadSystemMessage(); // Load the message when the page loads
-    document.getElementById('system-message').addEventListener('input', saveSystemMessage); // Save the message when modified
-});
+/* ---- COST CALC ---- */
+function calcCost(pt, ct, model) {
+  const m = MODELS.find(x => x.id === model);
+  if (!m) return 0;
+  return (pt * m.in / 1e6) + (ct * m.out / 1e6);
+}
+
+/* ---- UI HELPERS ---- */
+function addBotMessage(text) {
+  const div = document.createElement('div');
+  div.className = 'message bot-message';
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+  return div;
+}
+
+function addUserBubble(text) {
+  const div = document.createElement('div');
+  div.className = 'message user-message';
+  div.textContent = text;
+  chatEl.appendChild(div);
+}
+
+function addSystemBubble(text) {
+  const div = document.createElement('div');
+  div.className = 'message system-message';
+  div.textContent = '⚙ System: ' + text;
+  chatEl.insertBefore(div, chatEl.firstChild);
+}
+
+function showAlert(msg) {
+  const div = addBotMessage('⚠ ' + msg);
+  div.style.color = '#fbbf24';
+}
