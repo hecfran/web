@@ -20,10 +20,10 @@
   --accent:        #06b6d4;
   --accent-light:  #22d3ee;
 
-  /* Backgrounds */
-  --bg-dark:       #0a1120;
-  --bg-card:       rgba(14, 24, 42, 0.85);
-  --bg-card-hover: rgba(22, 36, 60, 0.92);
+  /* Backgrounds — neutral dark grey (no blue tint) */
+  --bg-dark:       #0d1117;
+  --bg-card:       rgba(22, 27, 34, 0.88);
+  --bg-card-hover: rgba(33, 38, 45, 0.92);
 
   /* Text */
   --text-primary:   #f4f8ff;
@@ -67,8 +67,8 @@ body {
 .bg-gradient {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.08) 0%, transparent 60%),
-              radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.06) 0%, transparent 50%);
+  background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.04) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.03) 0%, transparent 50%);
 }
 #particles-canvas {
   position: absolute;
@@ -101,7 +101,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0.85rem 2rem;
-  background: rgba(10, 17, 32, 0.8);
+  background: rgba(13, 17, 23, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -109,7 +109,7 @@ body {
 }
 .navbar.scrolled {
   padding: 0.55rem 2rem;
-  background: rgba(10, 17, 32, 0.95);
+  background: rgba(13, 17, 23, 0.96);
 }
 
 .nav-brand {
@@ -414,7 +414,7 @@ body {
   padding: 5rem 1.5rem;
 }
 .section-alt {
-  background: rgba(6, 10, 20, 0.4);
+  background: rgba(13, 17, 23, 0.4);
 }
 .container {
   max-width: 1100px;
@@ -438,7 +438,7 @@ body {
    ============================================ */
 .about-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.25rem;
   margin-bottom: 2.5rem;
 }
@@ -634,6 +634,10 @@ body {
   background: rgba(34,197,94,0.1);
   color: #4ade80;
 }
+.phd-icon {
+  background: rgba(184,134,11,0.15);
+  color: #d4a017;
+}
 
 /* Demo tags */
 .demo-tags {
@@ -655,6 +659,7 @@ body {
 .tag-ai        { background: rgba(168,85,247,0.12); color: #c084fc; border-color: rgba(168,85,247,0.28); }
 .tag-year      { background: rgba(100,116,139,0.14); color: var(--text-muted); border-color: rgba(100,116,139,0.22); }
 .tag-anthropic { background: rgba(234,115,53,0.12); color: #fb8c4a; border-color: rgba(234,115,53,0.28); }
+.tag-api       { background: rgba(251,188,4,0.12);  color: #fbbf24; border-color: rgba(251,188,4,0.25); }
 
 /* ============================================
    FOOTER
@@ -662,7 +667,7 @@ body {
 .footer {
   position: relative;
   z-index: 1;
-  background: rgba(6, 10, 20, 0.9);
+  background: rgba(13, 17, 23, 0.9);
   border-top: 1px solid var(--border);
   padding: 2.5rem 2rem;
 }
@@ -729,7 +734,7 @@ body {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 2000;
-  background: rgba(10, 16, 30, 0.97);
+  background: rgba(13, 17, 23, 0.97);
   border-top: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -773,7 +778,7 @@ body {
    RESPONSIVE — Tablet
    ============================================ */
 @media (max-width: 1024px) {
-  .about-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-grid { grid-template-columns: repeat(3, 1fr); }
   .hero-image-wrapper { width: 200px; height: 200px; }
 }
 
@@ -787,7 +792,7 @@ body {
     top: 0; right: -100%;
     width: min(320px, 85vw);
     height: 100dvh;
-    background: rgba(8, 14, 26, 0.97);
+    background: rgba(13, 17, 23, 0.97);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid var(--border);

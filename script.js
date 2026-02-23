@@ -6,20 +6,30 @@
 /* ---- STARTUP DATA ---- */
 const STARTUPS = [
   {
+    name: "Hero's Diary",
+    year: "2024–*",
+    status: "active",
+    statusLabel: "Active",
+    problem: "Social isolation and inconsistent personal growth.",
+    short: "AI-powered smart journal that transforms personal reflections into a roadmap for growth, connecting like-minded 'heroes' to pursue life goals together. <a href='https://herosdiary.com' target='_blank' rel='noopener'>herosdiary.com</a>",
+    long: "Hero's Diary is a comprehensive digital ecosystem for self-reflection and real-world transformation. It offers diverse input methods — conversational AI, voice recording and dictation, and handwritten page scanning — to capture every insight effortlessly. The platform addresses social isolation by connecting users with aligned goals, ensures habits are SMART and anchored to a long-term vision, and provides AI-generated reports on emotional and physical well-being. Using encrypted, date-stamped logs, it preserves narrative integrity while breaking cycles of emotional stagnation through guided prompts on Stoicism and gratitude. Whether you are an entrepreneur documenting progress or someone searching for a partner with a shared vision, Hero's Diary provides the security, intelligence, and community needed to turn a private diary into a lasting legacy.",
+    url: "https://herosdiary.com"
+  },
+  {
     name: "onceover.ai",
     year: "2024",
     status: "closed",
-    statusLabel: "Aborted",
+    statusLabel: "Closed",
     problem: "Reducing costs for hiring.",
     short: "AI-powered platform to process CVs and conduct job interviews as a first filter for shortlisting candidates.",
     long: "An online platform that uses artificial intelligence to process CVs and conduct automated job interviews, providing an intelligent first filter for shortlisting candidates before human review. This significantly reduces the time and cost associated with the early stages of recruitment.",
     url: "https://www.onceover.ai/"
   },
   {
-    name: "iKey",
+    name: "iKey ★",
     year: "2019–*",
-    status: "confidential",
-    statusLabel: "Confidential",
+    status: "trading",
+    statusLabel: "Active",
     problem: "Can you see the rainbow after the rain? Many people can't due to preventable blindness.",
     short: "Non-invasive health test based on image processing of retina images for early detection of glaucoma and other eye conditions.",
     long: "iKey developed a non-invasive health test based on advanced image processing of retinal fundus images. The system enables early detection of glaucoma and other preventable eye conditions through routine screening, with the potential to prevent blindness in thousands of patients.",
@@ -29,7 +39,7 @@ const STARTUPS = [
     name: "LoyLap",
     year: "2018",
     status: "trading",
-    statusLabel: "Still Trading",
+    statusLabel: "Active",
     problem: "Helping businesses identify their best customers.",
     short: "Virtual loyalty card and payment platform enabling businesses to engage and reward their best customers.",
     long: "LoyLap is a virtual loyalty card for payments, helping businesses identify and engage their best and most influential customers. The platform allowed merchants to run personalised loyalty programs and gather data-driven insights about customer behaviour.",
@@ -39,7 +49,7 @@ const STARTUPS = [
     name: "Predictive Analytics Platform",
     year: "2017–18",
     status: "closed",
-    statusLabel: "Aborted",
+    statusLabel: "Closed",
     problem: "Businesses need to identify their best and most influential customers to promote their business.",
     short: "Predictive analytics platform built in collaboration with Technological University of Dublin to identify high-value customers.",
     long: "A predictive analytics platform built in collaboration with Technological University of Dublin. The project aimed to identify businesses' best and most influential customers using machine learning models. The venture was ultimately aborted due to difficulties collaborating with public administration and aligning institutional goals with commercial timelines."
@@ -57,16 +67,16 @@ const STARTUPS = [
     name: "CrowdLending Friends",
     year: "2013",
     status: "closed",
-    statusLabel: "Aborted",
+    statusLabel: "Closed",
     problem: "Difficulties getting low-interest loans and facilitating P2P loans to friends.",
     short: "Crowdlending network where funding is provided by a network of friends at increasing interest rates from further relationship nodes.",
     long: "A social lending platform where funding is structured through a network of personal relationships, with interest rates increasing for more distant connection nodes. The concept addressed the difficulty of accessing low-interest personal loans and formalising P2P loans. The project was aborted due to the complexity of testing the market and navigating financial regulations."
   },
   {
     name: "Misakai",
-    year: "2013–*",
+    year: "2013–2015",
     status: "trading",
-    statusLabel: "Exists (No Growth)",
+    statusLabel: "Active",
     problem: "Internet of Things: communication between intelligent objects.",
     short: "General library for broadcasting and filtering messages between devices — Backend as a Service for IoT.",
     long: "Misakai is a general-purpose library for broadcasting and filtering messages between connected devices, positioning itself as a Backend as a Service for IoT applications. While technically sound, the collaboration with the co-founder proved too difficult to sustain meaningful growth. The company still exists but without significant traction."
@@ -75,7 +85,7 @@ const STARTUPS = [
     name: "Contrastify",
     year: "2012",
     status: "closed",
-    statusLabel: "Low Usage",
+    statusLabel: "Closed",
     problem: "No specific external problem — exploratory venture.",
     short: "Search engine for public emotion on a keyword, based on real-time sentiment analysis of tweets.",
     long: "Contrastify was a search engine that surfaced public emotional reactions to any keyword by performing real-time sentiment analysis on Twitter data. Users could search for topics and see the emotional tone of the crowd. Despite being technically innovative, it achieved low usage and was discontinued."
@@ -84,7 +94,7 @@ const STARTUPS = [
     name: "Poem Editor / Romantic Platform",
     year: "2011",
     status: "closed",
-    statusLabel: "Abandoned",
+    statusLabel: "Closed",
     problem: "Difficulties writing poems.",
     short: "An AI-assisted poem editor that helps find rhyming words, encourages writing through a chatbot, and enables publishing and gifting poems.",
     long: "A poetry writing assistant that used NLP to suggest rhyming words, employed a chatbot to encourage the user to continue writing, and provided a publishing platform to share poems with personal gifts. The venture was abandoned due to NLP technological limitations of the era, excessive distraction from incubator advisors, and personal needs (completing the PhD)."
@@ -93,7 +103,7 @@ const STARTUPS = [
     name: "Digital Lab Notebook",
     year: "2009",
     status: "closed",
-    statusLabel: "Abandoned",
+    statusLabel: "Closed",
     problem: "Research workers need to prove what work they did and when to stop patent competitors.",
     short: "A tamper-proof digital lab notebook with timestamped entries — like a blockchain for research documentation.",
     long: "A digital lab notebook in which the company cryptographically proved submission times with immutable timestamps, functioning like a blockchain before blockchain became mainstream. The target users were researchers needing legal-grade documentation. The venture was abandoned due to difficulties identifying buyers: researchers rarely want to be audited, and institutions are notoriously difficult to work with commercially."
@@ -105,8 +115,7 @@ function renderStartups() {
   const grid = document.getElementById('startups-grid');
   if (!grid) return;
   const statusClass = {
-    active: 'status-active', confidential: 'status-confidential',
-    trading: 'status-trading', closed: 'status-closed'
+    active: 'status-active', trading: 'status-active', closed: 'status-closed'
   };
   STARTUPS.forEach((s, i) => {
     const card = document.createElement('div');
@@ -114,7 +123,7 @@ function renderStartups() {
     card.style.animationDelay = `${i * 0.07}s`;
     card.innerHTML = `
       <div class="startup-header">
-        <span class="startup-year">${s.year}</span>
+        <span class="demo-tag tag-year">${s.year}</span>
         <span class="startup-status ${statusClass[s.status]}">${s.statusLabel}</span>
       </div>
       <h3>${s.name}</h3>
@@ -148,10 +157,10 @@ if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D
 }
 
 /* ============================================================
-   GITHUB CONTRIBUTION CALENDAR BACKGROUND v2
-   - Much darker greens (easy to read text over them)
-   - No falling / vertical streaks
-   - Cells randomly and independently pulse in intensity
+   GITHUB CONTRIBUTION CALENDAR BACKGROUND v3
+   - Grey dark background with VISIBLE empty cells (#161b22)
+   - Consecutive stretches of empty/active cells (like real GitHub)
+   - Green active cells pulse gently
    - Occasional horizontal "wave" sweeps left-to-right
    ============================================================ */
 function initCalendarBackground() {
@@ -159,16 +168,17 @@ function initCalendarBackground() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  // VERY dark green palette — designed to not interfere with readability
+  // GitHub-style palette (dark grey empty, green active)
+  const EMPTY_COLOR = '#161b22';            // visible dark grey for level 0
   const GREEN = [
-    'rgba(10, 18, 12, 0.0)',    // 0 – empty
-    'rgba(8, 36, 20, 0.6)',     // 1 – very dark
-    'rgba(6, 52, 28, 0.65)',    // 2 – dark
-    'rgba(12, 72, 36, 0.7)',    // 3 – medium (still dark)
-    'rgba(20, 90, 44, 0.75)'    // 4 – "bright" (but still subdued)
+    null,                                     // 0 – handled by EMPTY_COLOR
+    'rgba(14, 68, 41, 0.80)',                // 1 – darkest green
+    'rgba(0, 109, 50, 0.80)',                // 2 – dark green
+    'rgba(38, 166, 65, 0.75)',               // 3 – medium green
+    'rgba(57, 211, 83, 0.70)'                // 4 – bright green
   ];
 
-  const CELL = 12, GAP = 3, STEP = CELL + GAP;
+  const CELL = 12, GAP = 6, STEP = CELL + GAP;
   let cols, rows, cells = [], W, H;
 
   // Horizontal wave state
@@ -183,21 +193,48 @@ function initCalendarBackground() {
     initWaves();
   }
 
+  /* Generate row patterns with CONSECUTIVE runs of active/empty cells */
+  function generateRowPattern(numCols) {
+    const pattern = new Array(numCols);
+    let c = 0;
+    while (c < numCols) {
+      // Decide: active run or empty run
+      if (Math.random() < 0.45) {
+        // Empty run: 2–7 consecutive cells
+        const runLen = 2 + Math.floor(Math.random() * 6);
+        for (let i = 0; i < runLen && c < numCols; i++, c++) {
+          pattern[c] = 0;
+        }
+      } else {
+        // Active run: 3–12 consecutive cells with varying intensity
+        const runLen = 3 + Math.floor(Math.random() * 10);
+        const baseIntensity = Math.floor(Math.random() * 4) + 1;
+        for (let i = 0; i < runLen && c < numCols; i++, c++) {
+          // Vary intensity within the run (±1 from base)
+          const vary = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+          pattern[c] = Math.max(1, Math.min(4, baseIntensity + vary));
+        }
+      }
+    }
+    return pattern;
+  }
+
   function buildCells() {
     cells = [];
-    for (let c = 0; c < cols; c++) {
-      for (let r = 0; r < rows; r++) {
+    for (let r = 0; r < rows; r++) {
+      const rowPattern = generateRowPattern(cols);
+      for (let c = 0; c < cols; c++) {
         cells.push({
           x: c * STEP,
           y: r * STEP,
-          baseLevel: Math.random() < 0.40 ? 0 : Math.floor(Math.random() * 4) + 1,
+          baseLevel: rowPattern[c],
           level: 0,
-          opacity: Math.random() * 0.25 + 0.05,
+          opacity: rowPattern[c] > 0 ? (Math.random() * 0.25 + 0.10) : 0.5,
           // Independent random pulse per cell
           phase: Math.random() * Math.PI * 2,
-          speed: 0.001 + Math.random() * 0.003,  // half speed
+          speed: 0.001 + Math.random() * 0.003,
           // Random re-roll timer: each cell occasionally changes its base level
-          nextChange: Math.random() * 600 + 200,
+          nextChange: Math.random() * 900 + 400,
           changeCounter: 0,
           col: c,
           row: r
@@ -208,21 +245,18 @@ function initCalendarBackground() {
 
   function initWaves() {
     waves = [];
-    // Create a few horizontal waves at random rows
     for (let i = 0; i < Math.max(3, Math.floor(rows / 8)); i++) {
       waves.push({
         row: Math.floor(Math.random() * rows),
-        col: -10 - Math.random() * cols, // start off-screen left
-        speed: 0.03 + Math.random() * 0.06,  // slow horizontal movement
+        col: -10 - Math.random() * cols,
+        speed: 0.03 + Math.random() * 0.06,
         length: 6 + Math.floor(Math.random() * 12),
         active: Math.random() < 0.5
       });
     }
   }
 
-  // Check prefers-reduced-motion
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   let frame = 0;
 
   function draw() {
@@ -230,21 +264,19 @@ function initCalendarBackground() {
     frame++;
 
     if (prefersReduced) {
-      // Static version: just draw cells at base level, no animation
       cells.forEach(cell => {
         if (cell.baseLevel === 0) return;
-        ctx.globalAlpha = 0.15;
+        ctx.globalAlpha = 0.20;
         ctx.fillStyle = GREEN[cell.baseLevel];
         ctx.beginPath();
         ctx.roundRect(cell.x, cell.y, CELL, CELL, 2);
         ctx.fill();
       });
       ctx.globalAlpha = 1;
-      return; // Don't loop
+      return;
     }
 
     // --- Wave management ---
-    // Spawn new waves occasionally
     if (frame % 240 === 0) {
       waves.forEach(w => {
         if (!w.active && Math.random() < 0.4) {
@@ -255,16 +287,12 @@ function initCalendarBackground() {
         }
       });
     }
-
-    // Advance waves horizontally
     waves.forEach(w => {
       if (w.active) {
         w.col += w.speed;
         if (w.col > cols + w.length) w.active = false;
       }
     });
-
-    // Build wave lookup: row → wave col position
     const waveMap = {};
     waves.forEach(w => {
       if (w.active) {
@@ -275,18 +303,30 @@ function initCalendarBackground() {
 
     // --- Draw cells ---
     cells.forEach(cell => {
-      // Independent random re-roll of base intensity
+      // Slow re-roll of base intensity (but keep consecutive pattern feel)
       cell.changeCounter++;
       if (cell.changeCounter >= cell.nextChange) {
         cell.changeCounter = 0;
-        cell.nextChange = Math.random() * 800 + 300;
-        cell.baseLevel = Math.random() < 0.40 ? 0 : Math.floor(Math.random() * 4) + 1;
+        cell.nextChange = Math.random() * 900 + 400;
+        // Only small changes to preserve the consecutive look
+        if (cell.baseLevel === 0) {
+          // Small chance to activate
+          if (Math.random() < 0.15) cell.baseLevel = Math.floor(Math.random() * 3) + 1;
+        } else {
+          // Small chance to go empty, or shift intensity ±1
+          if (Math.random() < 0.12) {
+            cell.baseLevel = 0;
+          } else {
+            const shift = Math.random() < 0.5 ? -1 : 1;
+            cell.baseLevel = Math.max(1, Math.min(4, cell.baseLevel + shift));
+          }
+        }
       }
 
       let level = cell.baseLevel;
       let alpha = cell.opacity;
 
-      // Slow organic pulse (independent per cell)
+      // Slow organic pulse for active cells
       cell.phase += cell.speed;
       if (level > 0) {
         const pulse = Math.sin(cell.phase) * 0.08;
@@ -310,7 +350,9 @@ function initCalendarBackground() {
         }
       }
 
-      if (level === 0 && alpha < 0.08) return; // skip invisible
+      // Skip empty cells — they blend with the page background,
+      // making consecutive missing stretches clearly visible
+      if (level === 0) return;
 
       ctx.globalAlpha = alpha;
       ctx.fillStyle = GREEN[level];
