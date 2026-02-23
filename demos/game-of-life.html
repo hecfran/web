@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game of Life</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+      color: #7fff7f;
+    }
+
+    #canvas {
+      border: 1px solid #333;
+      cursor: crosshair;
+      display: block;
+      background: #000;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      background: #1a1a1a;
+      color: #e0e0e0;
+      border: 1px solid #444;
+      padding: 8px 18px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    button:hover { background: #2a2a2a; border-color: #7fff7f; }
+
+    button#toggleBtn.running {
+      color: #ff7f7f;
+      border-color: #ff7f7f;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    input[type="range"] {
+      width: 90px;
+      accent-color: #7fff7f;
+    }
+
+    #stats {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: #555;
+      letter-spacing: 0.05em;
+    }
+    a.back { position: absolute; top: 16px; left: 20px; color: #555; text-decoration: none; font-size: 0.85rem; }
+    a.back:hover { color: #7fff7f; }
+  </style>
+</head>
+<body>
+
+<a class="back" href="index.html">&lt; back</a>
+<h1>GAME OF LIFE</h1>
+<canvas id="canvas"></canvas>
+
+<div class="controls">
+  <button id="toggleBtn">Start</button>
+  <button id="stepBtn">Step</button>
+  <button id="randomBtn">Randomize</button>
+  <button id="clearBtn">Clear</button>
+
+  <div class="control-group">
+    <label for="speedRange">Speed</label>
+    <input type="range" id="speedRange" min="1" max="60" value="15">
+    <span id="speedLabel">15 fps</span>
+  </div>
+
+  <div class="control-group">
+    <label for="sizeRange">Cell size</label>
+    <input type="range" id="sizeRange" min="4" max="20" value="10">
+    <span id="sizeLabel">10px</span>
+  </div>
+</div>
+
+<div id="stats">generation: 0 &nbsp;|&nbsp; alive: 0</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const toggleBtn = document.getElementById('toggleBtn');
+  const stepBtn = document.getElementById('stepBtn');
+  const randomBtn = document.getElementById('randomBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const speedRange = document.getElementById('speedRange');
+  const speedLabel = document.getElementById('speedLabel');
+  const sizeRange = document.getElementById('sizeRange');
+  const sizeLabel = document.getElementById('sizeLabel');
+  const statsEl = document.getElementById('stats');
+
+  let cellSize = 10;
+  let cols, rows;
+  let grid, nextGrid;
+  let running = false;
+  let generation = 0;
+  let fps = 15;
+  let lastTime = 0;
+  let animId = null;
+  let painting = false;
+  let paintValue = 1;
+
+  function resize() {
+    const maxW = Math.min(window.innerWidth - 40, 900);
+    const maxH = Math.min(window.innerHeight - 200, 600);
+    cols = Math.floor(maxW / cellSize);
+    rows = Math.floor(maxH / cellSize);
+    canvas.width = cols * cellSize;
+    canvas.height = rows * cellSize;
+    initGrids();
+  }
+
+  function initGrids() {
+    grid = new Uint8Array(cols * rows);
+    nextGrid = new Uint8Array(cols * rows);
+  }
+
+  function idx(c, r) { return r * cols + c; }
+
+  function randomize() {
+    for (let i = 0; i < grid.length; i++) {
+      grid[i] = Math.random() < 0.3 ? 1 : 0;
+    }
+    generation = 0;
+    render();
+    updateStats();
+  }
+
+  function clear() {
+    grid.fill(0);
+    generation = 0;
+    render();
+    updateStats();
+  }
+
+  function countNeighbors(c, r) {
+    let count = 0;
+    for (let dr = -1; dr <= 1; dr++) {
+      for (let dc = -1; dc <= 1; dc++) {
+        if (dr === 0 && dc === 0) continue;
+        const nc = (c + dc + cols) % cols;
+        const nr = (r + dr + rows) % rows;
+        count += grid[idx(nc, nr)];
+      }
+    }
+    return count;
+  }
+
+  function step() {
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const n = countNeighbors(c, r);
+        const alive = grid[idx(c, r)];
+        nextGrid[idx(c, r)] = alive
+          ? (n === 2 || n === 3 ? 1 : 0)
+          : (n === 3 ? 1 : 0);
+      }
+    }
+    [grid, nextGrid] = [nextGrid, grid];
+    generation++;
+    render();
+    updateStats();
+  }
+
+  function render() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw grid lines subtly
+    ctx.fillStyle = '#0a0a0a';
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if ((c + r) % 2 === 0) {
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    // Draw alive cells
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (grid[idx(c, r)]) {
+          const brightness = 200 + Math.floor(Math.random() * 55);
+          ctx.fillStyle = `rgb(80, ${brightness}, 80)`;
+          ctx.fillRect(c * cellSize + 1, r * cellSize + 1, cellSize - 1, cellSize - 1);
+        }
+      }
+    }
+  }
+
+  function updateStats() {
+    const alive = grid.reduce((s, v) => s + v, 0);
+    statsEl.textContent = `generation: ${generation}  |  alive: ${alive}`;
+  }
+
+  function loop(ts) {
+    if (!running) return;
+    animId = requestAnimationFrame(loop);
+    const interval = 1000 / fps;
+    if (ts - lastTime < interval) return;
+    lastTime = ts;
+    step();
+  }
+
+  function startStop() {
+    running = !running;
+    toggleBtn.textContent = running ? 'Stop' : 'Start';
+    toggleBtn.classList.toggle('running', running);
+    if (running) {
+      lastTime = 0;
+      animId = requestAnimationFrame(loop);
+    } else {
+      cancelAnimationFrame(animId);
+    }
+  }
+
+  // Canvas mouse/touch drawing
+  function cellAt(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX ?? e.touches[0].clientX) - rect.left;
+    const y = (e.clientY ?? e.touches[0].clientY) - rect.top;
+    return [Math.floor(x / cellSize), Math.floor(y / cellSize)];
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const [c, r] = cellAt(e);
+    if (c < 0 || c >= cols || r < 0 || r >= rows) return;
+    paintValue = grid[idx(c, r)] ? 0 : 1;
+    painting = true;
+    grid[idx(c, r)] = paintValue;
+    render();
+    updateStats();
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (!painting) return;
+    const [c, r] = cellAt(e);
+    if (c < 0 || c >= cols || r < 0 || r >= rows) return;
+    grid[idx(c, r)] = paintValue;
+    render();
+    updateStats();
+  });
+
+  window.addEventListener('mouseup', () => { painting = false; });
+
+  toggleBtn.addEventListener('click', startStop);
+  stepBtn.addEventListener('click', () => { if (!running) step(); });
+  randomBtn.addEventListener('click', randomize);
+  clearBtn.addEventListener('click', clear);
+
+  speedRange.addEventListener('input', () => {
+    fps = +speedRange.value;
+    speedLabel.textContent = `${fps} fps`;
+  });
+
+  sizeRange.addEventListener('input', () => {
+    cellSize = +sizeRange.value;
+    sizeLabel.textContent = `${cellSize}px`;
+    const wasRunning = running;
+    if (running) startStop();
+    resize();
+    if (wasRunning) startStop();
+  });
+
+  window.addEventListener('resize', () => {
+    const wasRunning = running;
+    if (running) startStop();
+    resize();
+    if (wasRunning) startStop();
+  });
+
+  // Init
+  resize();
+  randomize();
+</script>
+</body>
+</html>

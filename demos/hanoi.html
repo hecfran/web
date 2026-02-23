@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tower of Hanoi</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      user-select: none;
+    }
+    h1 { font-size: 1.6rem; letter-spacing: 0.15em; margin-bottom: 16px; color: #ff9f43; }
+    a.back { position: absolute; top: 16px; left: 20px; color: #555; text-decoration: none; font-size: 0.85rem; }
+    a.back:hover { color: #ff9f43; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: center; justify-content: center; }
+    button {
+      background: #1a1a1a; color: #e0e0e0; border: 1px solid #444;
+      padding: 8px 18px; font-family: inherit; font-size: 0.85rem;
+      cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    }
+    button:hover { background: #2a2a2a; border-color: #ff9f43; }
+    .control-group { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #888; }
+    input[type="range"] { width: 80px; accent-color: #ff9f43; }
+    #stats { margin-top: 12px; font-size: 0.75rem; color: #555; letter-spacing: 0.05em; }
+    canvas { display: block; cursor: pointer; }
+    #message {
+      margin-top: 10px; font-size: 1rem; color: #ff9f43;
+      min-height: 1.4em; letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="index.html">&lt; back</a>
+<h1>TOWER OF HANOI</h1>
+
+<div class="controls">
+  <button id="resetBtn">Reset</button>
+  <button id="solveBtn">Auto Solve</button>
+  <div class="control-group">
+    <label for="discRange">Discs</label>
+    <input type="range" id="discRange" min="3" max="9" value="5">
+    <span id="discLabel">5</span>
+  </div>
+  <div class="control-group">
+    <label for="speedRange">Speed</label>
+    <input type="range" id="speedRange" min="50" max="800" value="300">
+  </div>
+</div>
+
+<canvas id="canvas"></canvas>
+<div id="message"></div>
+<div id="stats">moves: 0 | minimum: 31</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const resetBtn = document.getElementById('resetBtn');
+  const solveBtn = document.getElementById('solveBtn');
+  const discRange = document.getElementById('discRange');
+  const discLabel = document.getElementById('discLabel');
+  const speedRange = document.getElementById('speedRange');
+  const statsEl = document.getElementById('stats');
+  const msgEl = document.getElementById('message');
+
+  let numDiscs = 5;
+  let towers = [[], [], []];
+  let moves = 0;
+  let selected = null; // { tower, disc }
+  let solving = false;
+  let solveQueue = [];
+  let solveTimer = null;
+
+  const COLORS = [
+    '#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c',
+    '#3498db','#9b59b6','#e84393','#fd79a8'
+  ];
+
+  function init() {
+    stopSolve();
+    const w = Math.min(window.innerWidth - 40, 780);
+    const h = Math.min(window.innerHeight - 260, 400);
+    canvas.width = w;
+    canvas.height = h;
+    towers = [[], [], []];
+    for (let i = numDiscs; i >= 1; i--) towers[0].push(i);
+    moves = 0;
+    selected = null;
+    msgEl.textContent = '';
+    render();
+    updateStats();
+  }
+
+  function pegX(i) { return canvas.width * (i + 1) / 4; }
+  function discW(d) { return 30 + d * ((canvas.width / 4 - 40) / numDiscs); }
+  const DISC_H = () => Math.min(28, (canvas.height - 80) / numDiscs);
+  const BASE_Y = () => canvas.height - 30;
+
+  function render() {
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Base
+    ctx.fillStyle = '#222';
+    ctx.fillRect(20, BASE_Y(), canvas.width - 40, 6);
+
+    // Pegs
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = '#333';
+      const px = pegX(i);
+      ctx.fillRect(px - 3, BASE_Y() - numDiscs * DISC_H() - 20, 6, numDiscs * DISC_H() + 20);
+
+      // Peg label
+      ctx.fillStyle = '#444';
+      ctx.font = '12px Courier New';
+      ctx.textAlign = 'center';
+      ctx.fillText(['A', 'B', 'C'][i], px, canvas.height - 10);
+    }
+
+    // Discs
+    for (let t = 0; t < 3; t++) {
+      towers[t].forEach((disc, idx) => {
+        const w = discW(disc);
+        const h = DISC_H();
+        const x = pegX(t) - w / 2;
+        const y = BASE_Y() - (idx + 1) * h;
+        const isSelected = selected && selected.tower === t && idx === towers[t].length - 1;
+
+        ctx.fillStyle = COLORS[(disc - 1) % COLORS.length];
+        if (isSelected) {
+          ctx.shadowColor = COLORS[(disc - 1) % COLORS.length];
+          ctx.shadowBlur = 15;
+        }
+        roundRect(x, isSelected ? y - 12 : y, w, h - 2, 4);
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 12px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillText(disc, pegX(t), (isSelected ? y - 12 : y) + h / 2 + 1);
+      });
+    }
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.fill();
+  }
+
+  function updateStats() {
+    const min = Math.pow(2, numDiscs) - 1;
+    statsEl.textContent = `moves: ${moves} | minimum: ${min}`;
+  }
+
+  function clickTower(t) {
+    if (solving) return;
+    if (selected === null) {
+      if (towers[t].length === 0) return;
+      selected = { tower: t };
+      render();
+    } else {
+      if (t === selected.tower) {
+        selected = null;
+        render();
+        return;
+      }
+      const disc = towers[selected.tower][towers[selected.tower].length - 1];
+      const topDest = towers[t].length ? towers[t][towers[t].length - 1] : Infinity;
+      if (disc < topDest) {
+        towers[selected.tower].pop();
+        towers[t].push(disc);
+        moves++;
+        selected = null;
+        render();
+        updateStats();
+        checkWin();
+      } else {
+        msgEl.textContent = 'invalid move';
+        setTimeout(() => { if (msgEl.textContent === 'invalid move') msgEl.textContent = ''; }, 1200);
+      }
+    }
+  }
+
+  function checkWin() {
+    if (towers[2].length === numDiscs) {
+      const min = Math.pow(2, numDiscs) - 1;
+      msgEl.textContent = moves === min
+        ? `solved in ${moves} moves (optimal!)`
+        : `solved in ${moves} moves (optimal: ${min})`;
+    }
+  }
+
+  canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const seg = canvas.width / 3;
+    const t = Math.min(2, Math.floor(x / (canvas.width / 3.6) + 0.15));
+    // Determine closest peg
+    let closest = 0, minDist = Infinity;
+    for (let i = 0; i < 3; i++) {
+      const d = Math.abs(x - pegX(i));
+      if (d < minDist) { minDist = d; closest = i; }
+    }
+    clickTower(closest);
+  });
+
+  // Auto-solve
+  function generateMoves(n, from, to, aux) {
+    if (n === 0) return;
+    generateMoves(n - 1, from, aux, to);
+    solveQueue.push([from, to]);
+    generateMoves(n - 1, aux, to, from);
+  }
+
+  function startSolve() {
+    if (solving) return;
+    init();
+    solving = true;
+    solveQueue = [];
+    generateMoves(numDiscs, 0, 2, 1);
+    solveBtn.textContent = 'Stop';
+    runSolve();
+  }
+
+  function runSolve() {
+    if (!solving || solveQueue.length === 0) {
+      stopSolve();
+      return;
+    }
+    const [from, to] = solveQueue.shift();
+    const disc = towers[from].pop();
+    towers[to].push(disc);
+    moves++;
+    render();
+    updateStats();
+    if (solveQueue.length === 0) {
+      checkWin();
+      stopSolve();
+      return;
+    }
+    solveTimer = setTimeout(runSolve, 850 - +speedRange.value);
+  }
+
+  function stopSolve() {
+    solving = false;
+    clearTimeout(solveTimer);
+    solveQueue = [];
+    solveBtn.textContent = 'Auto Solve';
+  }
+
+  resetBtn.addEventListener('click', init);
+  solveBtn.addEventListener('click', () => solving ? stopSolve() : startSolve());
+  discRange.addEventListener('input', () => {
+    numDiscs = +discRange.value;
+    discLabel.textContent = numDiscs;
+    init();
+  });
+
+  window.addEventListener('resize', () => {
+    const w = Math.min(window.innerWidth - 40, 780);
+    const h = Math.min(window.innerHeight - 260, 400);
+    canvas.width = w;
+    canvas.height = h;
+    render();
+  });
+
+  init();
+</script>
+</body>
+</html>
