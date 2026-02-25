@@ -25,26 +25,40 @@ web/
 ├── styles.css              <- Design system (v2026)
 ├── script.js               <- Main JavaScript (calendar BG, startups, nav)
 ├── CNAME                   <- Domain: ofranco.top
-│
-├── games/
-│   ├── minesweeper.html    <- Minesweeper game (AI-generated, themed)
-│   └── snake.html          <- Snake game (AI-generated, themed)
-│
-├── GPT/                    <- GPT Explorer v1 (single message + cost)
-├── GPT2/                   <- GPT Explorer v2 (multi-message + cost)
-├── GPT3/                   <- Vector Store Uploader (experimental)
-├── gemini/                 <- Google Gemini API Explorer
-├── GOL/                    <- Conway's Game of Life
-├── Hanoi/                  <- Towers of Hanoi solver
-├── numbers/                <- Number Mnemonic System (rule-based)
-├── numbersGPT/             <- Number Mnemonic System (AI-powered)
-├── img/                    <- Images (profile photo, backgrounds, logos)
-├── 2024/                   <- Full backup of original 2024 version
-│
 ├── README.md               <- This file
-├── CHANGES.md              <- Full change log (v2026 redesign)
-├── TIMESTAMP_DIARY.md      <- Development diary with timestamps
-└── QUESTIONS.md            <- Open questions for next iteration
+├── LICENSE
+│
+├── demos/                  <- All interactive demos & games
+│   ├── GPT/                <- GPT Explorer v1 (single message + cost)
+│   ├── GPT2/               <- GPT Explorer v2 (multi-message + cost)
+│   ├── GPT3/               <- Vector Store Uploader (experimental)
+│   ├── gemini/             <- Google Gemini API Explorer
+│   ├── claude/             <- Anthropic Claude API Explorer
+│   ├── GOL/                <- Conway's Game of Life
+│   ├── Hanoi/              <- Towers of Hanoi solver
+│   ├── numbers/            <- Number Mnemonic System (rule-based)
+│   ├── numbersGPT/         <- Number Mnemonic System (AI-powered)
+│   ├── ikey-test/          <- iKey Application Mock Demo
+│   ├── games/
+│   │   ├── minesweeper.html <- Minesweeper (AI-generated, themed)
+│   │   └── snake.html       <- Snake (AI-generated, themed)
+│   ├── hanoi.html          <- Towers of Hanoi v2 (drag-and-drop)
+│   └── game-of-life.html   <- Game of Life v2 (drawing controls)
+│
+├── documents/              <- Non-web files & development docs
+│   ├── master-thesis.pdf   <- Master Thesis (downloadable from site)
+│   ├── CHANGES.md          <- Full change log (v2026 redesign)
+│   ├── TIMESTAMP_DIARY.md  <- Development diary with timestamps
+│   ├── QUESTIONS.md        <- Open questions for next iteration
+│   └── ...
+│
+├── img/                    <- Images (profile photo, backgrounds, logos)
+│   ├── logo.svg            <- Site favicon (HF monogram, SVG)
+│   ├── logo.png            <- Site favicon (fallback, PNG)
+│   ├── HectorFranco.jpg    <- Profile photo
+│   └── background*.jpg     <- Background images
+│
+└── 2024/                   <- Full backup of original 2024 version
 ```
 
 ---
@@ -53,69 +67,50 @@ web/
 
 ### Visual Design
 - **Theme:** Dark navy (#0f172a) with GitHub-green accent palette
-- **Background:** Animated contribution calendar canvas — falling green streak highlights over a grid of cells in 5 intensity levels matching GitHub's contribution graph
+- **Background:** Animated contribution calendar canvas — green streak highlights over a grid of cells in 5 intensity levels matching GitHub's contribution graph
 - **Typography:** Inter (body) + JetBrains Mono (numbers, code, metrics)
+- **Logo:** HF monogram favicon with Google-colored gradient accent
 - **Fully responsive:** desktop, tablet, and mobile layouts
 
 ### Sections
-1. **Hero** — Name, badge (typed animation), stats, CTA buttons, social links
-2. **About** — 4 skill cards + biography
-3. **Start-ups** — 10 ventures (2009-2024), click-to-expand cards with colour-coded status
-4. **Demos** — 10 icon cards linking to tools and profiles
-5. **Games** — Minesweeper + Snake (AI-generated badge)
+1. **Hero** — Name with Google-colored letters, stats, CTA buttons, social links
+2. **About** — 5 skill cards + biography
+3. **Start-ups** — 11 ventures (2009–2025), click-to-expand cards with colour-coded status
+4. **Demos** — 16 demo cards: API explorers, algorithms, games, and research
+5. **Footer** — Copyright, social links, link to v2024
 
 ---
 
-## GPT Explorer Tools
+## Demos
 
-### Supported Models (v2026 pricing)
-| Model | Input $/1M | Output $/1M |
-|-------|-----------|------------|
-| gpt-4o | $2.50 | $10.00 |
-| gpt-4o-mini | $0.15 | $0.60 |
-| o1 | $15.00 | $60.00 |
-| o1-mini | $1.10 | $4.40 |
-| o3-mini | $1.10 | $4.40 |
-| gpt-4-turbo | $10.00 | $30.00 |
-| gpt-4 | $30.00 | $60.00 |
-| gpt-3.5-turbo | $0.50 | $1.50 |
+### API Explorers
+- **GPT Explorer v1** — Single-message ChatGPT interface with real-time cost tracking
+- **GPT Explorer v2** — Multi-message conversation with system/user messages
+- **Claude Explorer** — Anthropic Claude API explorer (Sonnet, Opus, Haiku)
+- **Gemini Explorer** — Google Gemini API explorer with content safety ratings
 
-> Check [openai.com/pricing](https://openai.com/pricing) for current rates.
+### Algorithms & Simulations
+- **Game of Life** (v1 & v2) — Conway's cellular automaton
+- **Towers of Hanoi** (v1 & v2) — Recursive solver and drag-and-drop game
+- **Mnemonic System** — Rule-based number-to-word converter
+- **AI Mnemonic** — AI-powered mnemonic generation (7 languages)
 
----
+### Games
+- **Minesweeper** — Easy/Medium/Hard, flag mode, chord reveal, timer
+- **Snake** — Adjustable speed & grid, mobile d-pad controls
 
-## Background Animation — GitHub Calendar Effect
-
-The canvas background renders a grid of rounded squares in GitHub's contribution calendar colours:
-
-- Level 0: #161b22 (empty)
-- Level 1: #0e4429 (low)
-- Level 2: #006d32 (medium-low)
-- Level 3: #26a641 (medium-high)
-- Level 4: #39d353 (peak / brightest)
-
-Falling streak highlights travel down columns independently. The head cell is brightest (level 4), the tail fades over 8-12 cells. This shared animation runs on: main page, GPT Explorer, and both games.
-
----
-
-## Games
-
-### Minesweeper (/games/minesweeper.html)
-- Difficulties: Easy 9x9/10 mines, Medium 16x16/40, Hard 16x30/99
-- Flag mode, chord reveal, timer
-- Created via AI generator
-
-### Snake (/games/snake.html)
-- Adjustable speed (4-20 fps) and grid size (15-35)
-- On-screen d-pad for mobile, keyboard (arrows/WASD/Space)
-- Created via AI generator
+### Research
+- **PhD Thesis** — Semantic Role Labeling using HPC clusters (Trinity College Dublin, 2013)
+- **Master Thesis** — Prediction of binding sites in protein structures (UPV, 2010) — downloadable PDF
 
 ---
 
 ## Documentation
+
+Development documentation is stored in `/documents/`:
 - **CHANGES.md** — Detailed explanation of every change made and why
 - **TIMESTAMP_DIARY.md** — Development diary with per-section time estimates
-- **QUESTIONS.md** — 15 open questions + 10 documented assumptions for next iteration
+- **QUESTIONS.md** — Open questions and documented assumptions for next iteration
 
 ---
 

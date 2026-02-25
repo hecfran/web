@@ -27,7 +27,7 @@ const STARTUPS = [
   },
   {
     name: "iKey ★",
-    year: "2019–*",
+    year: "2019–2025",
     status: "trading",
     statusLabel: "Active",
     problem: "Can you see the rainbow after the rain? Many people can't due to preventable blindness.",

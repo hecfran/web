@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Mnemonic System</title>
+    <link rel="stylesheet" href="../styles.css">  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        main {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #digits {
+            width: 80%; /* Smaller width for input field */
+        }
+        #output {
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1  title="Version 2.0, using gpt4 for spanish "  >Major Mnemonic System  </h1>
+    </header>
+    <main>
+        <div class="form-group">
+            <label for="language">Language:</label>
+            <select id="language">
+                <option value="English">English</option>
+                <option value="Español">Español</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="digits">Enter Digits:</label>
+            <input type="text" id="digits" placeholder="Enter a sequence of digits">
+        </div>
+        <button id="transcribe-btn">Transcribe</button>
+        <h3>Transcribed Sequence:</h3>
+        <div id="output"></div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Hector O'Franco - Major Mnemonic System</p>
+    </footer>
+    <script src="eng.js"></script>
+    <script src="spa.js"></script>
+    <script src="transcription.js"></script>
+</body>
+</html>

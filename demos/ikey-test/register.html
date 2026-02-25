@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Setting baseline image</title>
+  <link rel="stylesheet" href="register.css">
+</head>
+<body>
+  <h2>Setting baseline image</h2>
+  <div class="explanation">
+    The purpose of this form is to set the pair base of fundus images that will be used to detect changes.
+  </div>
+  <form id="baselineForm" autocomplete="off">
+    <div class="form-group">
+      <label for="customerId">Clinic/shop ID</label>
+      <input type="text" id="customerId" name="customerId" required>
+    </div>
+    <div class="form-group">
+      <label for="patientId">Customer/Patient ID</label>
+      <input type="text" id="patientId" name="patientId" required>
+    </div>
+    <div class="form-group">
+      <label>Ethnicity <span class="required">*</span></label>
+      <div class="radio-group">
+        <label class="radio-inline"><input type="radio" name="ethnicity" value="Caucasian" required> Caucasian</label>
+        <label class="radio-inline"><input type="radio" name="ethnicity" value="African"> African</label>
+        <label class="radio-inline"><input type="radio" name="ethnicity" value="Asian"> Asian</label>
+        <label class="radio-inline"><input type="radio" name="ethnicity" value="Latino"> Latino</label>
+        <label class="radio-inline">
+          <input type="radio" name="ethnicity" value="Other"> Other:
+          <input type="text" id="ethnicityOther" name="ethnicityOther" style="width:100px; margin-left:4px;" disabled>
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>History of glaucoma</label>
+      <div class="radio-group">
+        <label class="radio-inline"><input type="radio" name="glaucomaHistory" value="Yes" required> Yes</label>
+        <label class="radio-inline"><input type="radio" name="glaucomaHistory" value="No"> No</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Family history of glaucoma</label>
+      <div class="radio-group">
+        <label class="radio-inline"><input type="radio" name="familyGlaucoma" value="Yes" required> Yes</label>
+        <label class="radio-inline"><input type="radio" name="familyGlaucoma" value="No"> No</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Diabetes</label>
+      <div class="radio-group">
+        <label class="radio-inline"><input type="radio" name="diabetes" value="Yes" required> Yes</label>
+        <label class="radio-inline"><input type="radio" name="diabetes" value="No"> No</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dob">Date of birth</label>
+      <input type="date" id="dob" name="dob" required>
+    </div>
+    <div class="note">
+      The following information will be stored encrypted for assisting patients to find their own records.<br>
+      <b>At least one field required</b>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone number</label>
+      <input type="text" id="phone" name="phone" pattern="[\d\s\-\+\(\)]*">
+    </div>
+    <div class="form-group">
+      <label for="email">Patient email</label>
+      <input type="email" id="email" name="email">
+    </div>
+    <div class="form-group">
+      <label for="idCard">ID card number</label>
+      <input type="text" id="idCard" name="idCard">
+    </div>
+    <div class="form-group">
+      <label>Upload fundus images (side by side):</label>
+      <div class="container">
+        <div class="upload-box" id="leftBox">
+          <span class="upload-label">Left Image</span>
+          <img id="leftPreview" src="" alt="" style="display:none;">
+          <span id="leftPlaceholder">Drag & drop or click to select</span>
+          <input type="file" accept="image/*,.dcm" id="leftInput" class="file-input">
+        </div>
+        <div class="upload-box" id="rightBox">
+          <span class="upload-label">Right Image</span>
+          <img id="rightPreview" src="" alt="" style="display:none;">
+          <span id="rightPlaceholder">Drag & drop or click to select</span>
+          <input type="file" accept="image/*,.dcm" id="rightInput" class="file-input">
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button type="submit">Submit</button>
+    </div>
+    <div id="result" style="margin-top:1em;font-weight:bold;"></div>
+  </form>
+  <script src="register.js"></script>
+</body>
+</html>
