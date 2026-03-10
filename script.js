@@ -32,7 +32,7 @@ const STARTUPS = [
     statusLabel: "Active",
     problem: "Can you see the rainbow after the rain? Many people can't due to preventable blindness.",
     short: "Non-invasive health test based on image processing of retina images for early detection of glaucoma and other eye conditions.",
-    long: "iKey developed a non-invasive health test based on advanced image processing of retinal fundus images. The system enables early detection of glaucoma and other preventable eye conditions through routine screening, with the potential to prevent blindness in thousands of patients.",
+    long: "iKey developed a non-invasive health test based on advanced image processing of retinal fundus images. The system enables early detection of glaucoma and other preventable eye conditions through routine screening, with the potential to prevent blindness in thousands of patients. Also see <a href='https://www.ikeyage.com/' target='_blank' rel='noopener'>iKey Age Detection</a>.",
     url: "https://www.ikey.ie"
   },
   {

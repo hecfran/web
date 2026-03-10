@@ -1,7 +1,7 @@
 # ofranco.top — Personal Website
 **Hector O'Franco** · A.I. Consultant & Software Engineer
 
-Live at: [ofranco.top](http://ofranco.top/) | GitHub Pages hosted
+Live at: [ofranco.top](https://ofranco.top/) | GitHub Pages hosted
 
 ---
 
