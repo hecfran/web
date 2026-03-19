@@ -3,156 +3,59 @@
    Main JavaScript — iteration 2
    ============================================ */
 
-/* ---- STARTUP DATA ---- */
-const STARTUPS = [
-  {
-    name: "Hero's Diary",
-    year: "2024–*",
-    status: "active",
-    statusLabel: "Active",
-    problem: "Social isolation and inconsistent personal growth.",
-    short: "AI-powered smart journal that transforms personal reflections into a roadmap for growth, connecting like-minded 'heroes' to pursue life goals together. <a href='https://herosdiary.com' target='_blank' rel='noopener'>herosdiary.com</a>",
-    long: "Hero's Diary is a comprehensive digital ecosystem for self-reflection and real-world transformation. It offers diverse input methods — conversational AI, voice recording and dictation, and handwritten page scanning — to capture every insight effortlessly. The platform addresses social isolation by connecting users with aligned goals, ensures habits are SMART and anchored to a long-term vision, and provides AI-generated reports on emotional and physical well-being. Using encrypted, date-stamped logs, it preserves narrative integrity while breaking cycles of emotional stagnation through guided prompts on Stoicism and gratitude. Whether you are an entrepreneur documenting progress or someone searching for a partner with a shared vision, Hero's Diary provides the security, intelligence, and community needed to turn a private diary into a lasting legacy.",
-    url: "https://herosdiary.com"
-  },
-  {
-    name: "onceover.ai",
-    year: "2024",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "Reducing costs for hiring.",
-    short: "AI-powered platform to process CVs and conduct job interviews as a first filter for shortlisting candidates.",
-    long: "An online platform that uses artificial intelligence to process CVs and conduct automated job interviews, providing an intelligent first filter for shortlisting candidates before human review. This significantly reduces the time and cost associated with the early stages of recruitment.",
-    url: "https://www.onceover.ai/"
-  },
-  {
-    name: "iKey ★",
-    year: "2019–2025",
-    status: "trading",
-    statusLabel: "Active",
-    problem: "Can you see the rainbow after the rain? Many people can't due to preventable blindness.",
-    short: "Non-invasive health test based on image processing of retina images for early detection of glaucoma and other eye conditions.",
-    long: "iKey developed a non-invasive health test based on advanced image processing of retinal fundus images. The system enables early detection of glaucoma and other preventable eye conditions through routine screening, with the potential to prevent blindness in thousands of patients. Also see <a href='https://www.ikeyage.com/' target='_blank' rel='noopener'>iKey Age Detection</a>.",
-    url: "https://www.ikey.ie"
-  },
-  {
-    name: "LoyLap",
-    year: "2018",
-    status: "trading",
-    statusLabel: "Active",
-    problem: "Helping businesses identify their best customers.",
-    short: "Virtual loyalty card and payment platform enabling businesses to engage and reward their best customers.",
-    long: "LoyLap is a virtual loyalty card for payments, helping businesses identify and engage their best and most influential customers. The platform allowed merchants to run personalised loyalty programs and gather data-driven insights about customer behaviour.",
-    url: "https://www.loylap.com/"
-  },
-  {
-    name: "Predictive Analytics Platform",
-    year: "2017–18",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "Businesses need to identify their best and most influential customers to promote their business.",
-    short: "Predictive analytics platform built in collaboration with Technological University of Dublin to identify high-value customers.",
-    long: "A predictive analytics platform built in collaboration with Technological University of Dublin. The project aimed to identify businesses' best and most influential customers using machine learning models. The venture was ultimately aborted due to difficulties collaborating with public administration and aligning institutional goals with commercial timelines."
-  },
-  {
-    name: "Airbnb Hosting",
-    year: "2015",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "Personal need for more social interaction.",
-    short: "A personal Airbnb hosting experience — profitable, fun, and educational in client relations.",
-    long: "Opened an Airbnb listing to gain direct experience dealing with clients and attending to their needs. While not an exponential venture, it was consistently profitable and provided valuable insights into customer service, hospitality, and human behaviour. Voluntarily closed and moved on to higher-leverage opportunities."
-  },
-  {
-    name: "CrowdLending Friends",
-    year: "2013",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "Difficulties getting low-interest loans and facilitating P2P loans to friends.",
-    short: "Crowdlending network where funding is provided by a network of friends at increasing interest rates from further relationship nodes.",
-    long: "A social lending platform where funding is structured through a network of personal relationships, with interest rates increasing for more distant connection nodes. The concept addressed the difficulty of accessing low-interest personal loans and formalising P2P loans. The project was aborted due to the complexity of testing the market and navigating financial regulations."
-  },
-  {
-    name: "Misakai",
-    year: "2013–2015",
-    status: "trading",
-    statusLabel: "Active",
-    problem: "Internet of Things: communication between intelligent objects.",
-    short: "General library for broadcasting and filtering messages between devices — Backend as a Service for IoT.",
-    long: "Misakai is a general-purpose library for broadcasting and filtering messages between connected devices, positioning itself as a Backend as a Service for IoT applications. While technically sound, the collaboration with the co-founder proved too difficult to sustain meaningful growth. The company still exists but without significant traction."
-  },
-  {
-    name: "Contrastify",
-    year: "2012",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "No specific external problem — exploratory venture.",
-    short: "Search engine for public emotion on a keyword, based on real-time sentiment analysis of tweets.",
-    long: "Contrastify was a search engine that surfaced public emotional reactions to any keyword by performing real-time sentiment analysis on Twitter data. Users could search for topics and see the emotional tone of the crowd. Despite being technically innovative, it achieved low usage and was discontinued."
-  },
-  {
-    name: "Poem Editor / Romantic Platform",
-    year: "2011",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "Difficulties writing poems.",
-    short: "An AI-assisted poem editor that helps find rhyming words, encourages writing through a chatbot, and enables publishing and gifting poems.",
-    long: "A poetry writing assistant that used NLP to suggest rhyming words, employed a chatbot to encourage the user to continue writing, and provided a publishing platform to share poems with personal gifts. The venture was abandoned due to NLP technological limitations of the era, excessive distraction from incubator advisors, and personal needs (completing the PhD)."
-  },
-  {
-    name: "Digital Lab Notebook",
-    year: "2009",
-    status: "closed",
-    statusLabel: "Closed",
-    problem: "Research workers need to prove what work they did and when to stop patent competitors.",
-    short: "A tamper-proof digital lab notebook with timestamped entries — like a blockchain for research documentation.",
-    long: "A digital lab notebook in which the company cryptographically proved submission times with immutable timestamps, functioning like a blockchain before blockchain became mainstream. The target users were researchers needing legal-grade documentation. The venture was abandoned due to difficulties identifying buyers: researchers rarely want to be audited, and institutions are notoriously difficult to work with commercially."
-  }
-];
-
 /* ---- RENDER STARTUPS ---- */
-function renderStartups() {
+async function renderStartups() {
   const grid = document.getElementById('startups-grid');
   if (!grid) return;
-  const statusClass = {
-    active: 'status-active', trading: 'status-active', closed: 'status-closed'
-  };
-  STARTUPS.forEach((s, i) => {
-    const card = document.createElement('div');
-    card.className = 'startup-card fade-in';
-    card.style.animationDelay = `${i * 0.07}s`;
-    card.innerHTML = `
-      <div class="startup-header">
-        <span class="demo-tag tag-year">${s.year}</span>
-        <span class="startup-status ${statusClass[s.status]}">${s.statusLabel}</span>
-      </div>
-      <h3>${s.name}</h3>
-      <p class="startup-short">${s.short}</p>
-      <div class="startup-long">
-        <p>${s.long}${s.url ? ` <a href="${s.url}" target="_blank" rel="noopener">Visit &rarr;</a>` : ''}</p>
-      </div>
-      <div class="startup-expand">
-        <span>Read more</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>`;
-    card.addEventListener('click', () => {
-      card.classList.toggle('expanded');
-      card.querySelector('.startup-expand span').textContent =
-        card.classList.contains('expanded') ? 'Show less' : 'Read more';
+
+  try {
+    const response = await fetch('./startups.json');
+    const startups = await response.json();
+    const statusClass = {
+      active: 'status-active', trading: 'status-active', closed: 'status-closed'
+    };
+    startups.forEach((s, i) => {
+      const card = document.createElement('div');
+      card.className = 'startup-card fade-in';
+      card.style.animationDelay = `${i * 0.07}s`;
+      card.innerHTML = `
+        <div class="startup-header">
+          <span class="demo-tag tag-year">${s.year}</span>
+          <span class="startup-status ${statusClass[s.status]}">${s.statusLabel}</span>
+        </div>
+        <h3>${s.name}</h3>
+        <p class="startup-short">${s.short}</p>
+        <div class="startup-long">
+          <p>${s.long}${s.url ? ` <a href="${s.url}" target="_blank" rel="noopener">Visit &rarr;</a>` : ''}</p>
+        </div>
+        <div class="startup-expand">
+          <span>Read more</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>`;
+      card.addEventListener('click', () => {
+        card.classList.toggle('expanded');
+        card.querySelector('.startup-expand span').textContent =
+          card.classList.contains('expanded') ? 'Show less' : 'Read more';
+      });
+      grid.appendChild(card);
     });
-    grid.appendChild(card);
-  });
+
+    // Run scroll animation observer for newly added cards
+    initScrollAnimations();
+  } catch (err) {
+    console.error("Failed to load startups:", err);
+  }
 }
 
 /* ---- roundRect polyfill ---- */
 if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.roundRect) {
-  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
-    r = Math.min(r, w/2, h/2);
-    this.moveTo(x+r,y); this.lineTo(x+w-r,y);
-    this.quadraticCurveTo(x+w,y,x+w,y+r); this.lineTo(x+w,y+h-r);
-    this.quadraticCurveTo(x+w,y+h,x+w-r,y+h); this.lineTo(x+r,y+h);
-    this.quadraticCurveTo(x,y+h,x,y+h-r); this.lineTo(x,y+r);
-    this.quadraticCurveTo(x,y,x+r,y); this.closePath(); return this;
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    this.moveTo(x + r, y); this.lineTo(x + w - r, y);
+    this.quadraticCurveTo(x + w, y, x + w, y + r); this.lineTo(x + w, y + h - r);
+    this.quadraticCurveTo(x + w, y + h, x + w - r, y + h); this.lineTo(x + r, y + h);
+    this.quadraticCurveTo(x, y + h, x, y + h - r); this.lineTo(x, y + r);
+    this.quadraticCurveTo(x, y, x + r, y); this.closePath(); return this;
   };
 }
 
@@ -168,15 +71,20 @@ function initCalendarBackground() {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  // GitHub-style palette (dark grey empty, green active)
-  const EMPTY_COLOR = '#161b22';            // visible dark grey for level 0
-  const GREEN = [
-    null,                                     // 0 – handled by EMPTY_COLOR
-    'rgba(14, 68, 41, 0.80)',                // 1 – darkest green
-    'rgba(0, 109, 50, 0.80)',                // 2 – dark green
-    'rgba(38, 166, 65, 0.75)',               // 3 – medium green
-    'rgba(57, 211, 83, 0.70)'                // 4 – bright green
-  ];
+  const EMPTY_COLOR = '#161b22';
+
+  const PALETTES = {
+    green: [null, 'rgba(14, 68, 41, 0.80)', 'rgba(0, 109, 50, 0.80)', 'rgba(38, 166, 65, 0.75)', 'rgba(57, 211, 83, 0.70)'],
+    blue: [null, 'rgba(10, 48, 105, 0.80)', 'rgba(9, 105, 218, 0.80)', 'rgba(84, 174, 255, 0.75)', 'rgba(121, 192, 255, 0.70)'],
+    gray: [null, 'rgba(48, 54, 61, 0.80)', 'rgba(104, 113, 125, 0.80)', 'rgba(139, 148, 158, 0.75)', 'rgba(195, 203, 212, 0.70)'],
+    gold: [null, 'rgba(84, 68, 20, 0.80)', 'rgba(158, 106, 3, 0.80)', 'rgba(210, 153, 34, 0.75)', 'rgba(227, 179, 65, 0.70)']
+  };
+
+  const randPal = Math.random();
+  let ACTIVE_PALETTE = PALETTES.green; // 70% of the time, it's green
+  if (randPal >= 0.7 && randPal < 0.8) ACTIVE_PALETTE = PALETTES.blue;
+  else if (randPal >= 0.8 && randPal < 0.9) ACTIVE_PALETTE = PALETTES.gray;
+  else if (randPal >= 0.9) ACTIVE_PALETTE = PALETTES.gold;
 
   const CELL = 12, GAP = 6, STEP = CELL + GAP;
   let cols, rows, cells = [], W, H;
@@ -185,7 +93,7 @@ function initCalendarBackground() {
   let waves = [];
 
   function resize() {
-    W = canvas.width  = window.innerWidth;
+    W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
     cols = Math.ceil(W / STEP) + 2;
     rows = Math.ceil(H / STEP) + 2;
@@ -232,7 +140,7 @@ function initCalendarBackground() {
           opacity: rowPattern[c] > 0 ? (Math.random() * 0.25 + 0.10) : 0.5,
           // Independent random pulse per cell
           phase: Math.random() * Math.PI * 2,
-          speed: 0.001 + Math.random() * 0.003,
+          speed: (0.001 + Math.random() * 0.003) * 0.5,
           // Random re-roll timer: each cell occasionally changes its base level
           nextChange: Math.random() * 900 + 400,
           changeCounter: 0,
@@ -249,7 +157,7 @@ function initCalendarBackground() {
       waves.push({
         row: Math.floor(Math.random() * rows),
         col: -10 - Math.random() * cols,
-        speed: 0.03 + Math.random() * 0.06,
+        speed: (0.03 + Math.random() * 0.06) * 0.5,
         length: 6 + Math.floor(Math.random() * 12),
         active: Math.random() < 0.5
       });
@@ -267,7 +175,7 @@ function initCalendarBackground() {
       cells.forEach(cell => {
         if (cell.baseLevel === 0) return;
         ctx.globalAlpha = 0.20;
-        ctx.fillStyle = GREEN[cell.baseLevel];
+        ctx.fillStyle = ACTIVE_PALETTE[cell.baseLevel];
         ctx.beginPath();
         ctx.roundRect(cell.x, cell.y, CELL, CELL, 2);
         ctx.fill();
@@ -283,7 +191,7 @@ function initCalendarBackground() {
           w.active = true;
           w.col = -w.length;
           w.row = Math.floor(Math.random() * rows);
-          w.speed = 0.03 + Math.random() * 0.06;
+          w.speed = (0.03 + Math.random() * 0.06) * 0.5;
         }
       });
     }
@@ -355,7 +263,7 @@ function initCalendarBackground() {
       if (level === 0) return;
 
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = GREEN[level];
+      ctx.fillStyle = ACTIVE_PALETTE[level];
       ctx.beginPath();
       ctx.roundRect(cell.x, cell.y, CELL, CELL, 2);
       ctx.fill();
@@ -372,8 +280,8 @@ function initCalendarBackground() {
 
 /* ---- NAVIGATION ---- */
 function initNavigation() {
-  const navbar  = document.getElementById('navbar');
-  const toggle  = document.getElementById('nav-toggle');
+  const navbar = document.getElementById('navbar');
+  const toggle = document.getElementById('nav-toggle');
   const navLinks = document.getElementById('nav-links');
 
   window.addEventListener('scroll', () => {
@@ -543,6 +451,7 @@ let currentLang = 'en';
 
 function switchLanguage(lang) {
   currentLang = lang;
+  document.documentElement.lang = lang;
   const t = TRANSLATIONS[lang];
   if (!t) return;
   // Update translatable elements

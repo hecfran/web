@@ -1,0 +1,105 @@
+[
+  {
+    "name": "Hero's Diary",
+    "year": "2024–*",
+    "status": "active",
+    "statusLabel": "Active",
+    "problem": "Social isolation and inconsistent personal growth.",
+    "short": "AI-powered smart journal that transforms personal reflections into a roadmap for growth, connecting like-minded 'heroes' to pursue life goals together. <a href='https://herosdiary.com' target='_blank' rel='noopener'>herosdiary.com</a>",
+    "long": "Hero's Diary is a comprehensive digital ecosystem for self-reflection and real-world transformation. It offers diverse input methods — conversational AI, voice recording and dictation, and handwritten page scanning — to capture every insight effortlessly. The platform addresses social isolation by connecting users with aligned goals, ensures habits are SMART and anchored to a long-term vision, and provides AI-generated reports on emotional and physical well-being. Using encrypted, date-stamped logs, it preserves narrative integrity while breaking cycles of emotional stagnation through guided prompts on Stoicism and gratitude. Whether you are an entrepreneur documenting progress or someone searching for a partner with a shared vision, Hero's Diary provides the security, intelligence, and community needed to turn a private diary into a lasting legacy.",
+    "url": "https://herosdiary.com"
+  },
+  {
+    "name": "onceover.ai",
+    "year": "2024",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "Reducing costs for hiring.",
+    "short": "AI-powered platform to process CVs and conduct job interviews as a first filter for shortlisting candidates.",
+    "long": "An online platform that uses artificial intelligence to process CVs and conduct automated job interviews, providing an intelligent first filter for shortlisting candidates before human review. This significantly reduces the time and cost associated with the early stages of recruitment.",
+    "url": "https://www.onceover.ai/"
+  },
+  {
+    "name": "iKey ★",
+    "year": "2019–2025",
+    "status": "trading",
+    "statusLabel": "Active",
+    "problem": "Can you see the rainbow after the rain? Many people can't due to preventable blindness.",
+    "short": "Non-invasive health test based on image processing of retina images for early detection of glaucoma and other eye conditions.",
+    "long": "iKey developed a non-invasive health test based on advanced image processing of retinal fundus images. The system enables early detection of glaucoma and other preventable eye conditions through routine screening, with the potential to prevent blindness in thousands of patients. Also see <a href='https://www.ikeyage.com/' target='_blank' rel='noopener'>iKey Age Detection</a>.",
+    "url": "https://www.ikey.ie"
+  },
+  {
+    "name": "LoyLap",
+    "year": "2018",
+    "status": "trading",
+    "statusLabel": "Active",
+    "problem": "Helping businesses identify their best customers.",
+    "short": "Virtual loyalty card and payment platform enabling businesses to engage and reward their best customers.",
+    "long": "LoyLap is a virtual loyalty card for payments, helping businesses identify and engage their best and most influential customers. The platform allowed merchants to run personalised loyalty programs and gather data-driven insights about customer behaviour.",
+    "url": "https://www.loylap.com/"
+  },
+  {
+    "name": "Predictive Analytics Platform",
+    "year": "2017–18",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "Businesses need to identify their best and most influential customers to promote their business.",
+    "short": "Predictive analytics platform built in collaboration with Technological University of Dublin to identify high-value customers.",
+    "long": "A predictive analytics platform built in collaboration with Technological University of Dublin. The project aimed to identify businesses' best and most influential customers using machine learning models. The venture was ultimately aborted due to difficulties collaborating with public administration and aligning institutional goals with commercial timelines."
+  },
+  {
+    "name": "Airbnb Hosting",
+    "year": "2015",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "Personal need for more social interaction.",
+    "short": "A personal Airbnb hosting experience — profitable, fun, and educational in client relations.",
+    "long": "Opened an Airbnb listing to gain direct experience dealing with clients and attending to their needs. While not an exponential venture, it was consistently profitable and provided valuable insights into customer service, hospitality, and human behaviour. Voluntarily closed and moved on to higher-leverage opportunities."
+  },
+  {
+    "name": "CrowdLending Friends",
+    "year": "2013",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "Difficulties getting low-interest loans and facilitating P2P loans to friends.",
+    "short": "Crowdlending network where funding is provided by a network of friends at increasing interest rates from further relationship nodes.",
+    "long": "A social lending platform where funding is structured through a network of personal relationships, with interest rates increasing for more distant connection nodes. The concept addressed the difficulty of accessing low-interest personal loans and formalising P2P loans. The project was aborted due to the complexity of testing the market and navigating financial regulations."
+  },
+  {
+    "name": "Misakai",
+    "year": "2013–2015",
+    "status": "trading",
+    "statusLabel": "Active",
+    "problem": "Internet of Things: communication between intelligent objects.",
+    "short": "General library for broadcasting and filtering messages between devices — Backend as a Service for IoT.",
+    "long": "Misakai is a general-purpose library for broadcasting and filtering messages between connected devices, positioning itself as a Backend as a Service for IoT applications. While technically sound, the collaboration with the co-founder proved too difficult to sustain meaningful growth. The company still exists but without significant traction."
+  },
+  {
+    "name": "Contrastify",
+    "year": "2012",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "No specific external problem — exploratory venture.",
+    "short": "Search engine for public emotion on a keyword, based on real-time sentiment analysis of tweets.",
+    "long": "Contrastify was a search engine that surfaced public emotional reactions to any keyword by performing real-time sentiment analysis on Twitter data. Users could search for topics and see the emotional tone of the crowd. Despite being technically innovative, it achieved low usage and was discontinued."
+  },
+  {
+    "name": "Poem Editor / Romantic Platform",
+    "year": "2011",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "Difficulties writing poems.",
+    "short": "An AI-assisted poem editor that helps find rhyming words, encourages writing through a chatbot, and enables publishing and gifting poems.",
+    "long": "A poetry writing assistant that used NLP to suggest rhyming words, employed a chatbot to encourage the user to continue writing, and provided a publishing platform to share poems with personal gifts. The venture was abandoned due to NLP technological limitations of the era, excessive distraction from incubator advisors, and personal needs (completing the PhD)."
+  },
+  {
+    "name": "Digital Lab Notebook",
+    "year": "2009",
+    "status": "closed",
+    "statusLabel": "Closed",
+    "problem": "Research workers need to prove what work they did and when to stop patent competitors.",
+    "short": "A tamper-proof digital lab notebook with timestamped entries — like a blockchain for research documentation.",
+    "long": "A digital lab notebook in which the company cryptographically proved submission times with immutable timestamps, functioning like a blockchain before blockchain became mainstream. The target users were researchers needing legal-grade documentation. The venture was abandoned due to difficulties identifying buyers: researchers rarely want to be audited, and institutions are notoriously difficult to work with commercially."
+  }
+]

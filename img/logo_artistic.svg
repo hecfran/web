@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Deep Space Background -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19" />
+      <stop offset="100%" stop-color="#1A2235" />
+    </linearGradient>
+    
+    <!-- Neon AI Glow -->
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" />     <!-- Cyan -->
+      <stop offset="50%" stop-color="#8A2BE2" />    <!-- Purple -->
+      <stop offset="100%" stop-color="#FF007F" />   <!-- Neon Pink -->
+    </linearGradient>
+    
+    <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur1" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur2" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur3" />
+      <feMerge>
+        <feMergeNode in="blur3" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Sleek container -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bg)" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+
+  <!-- Geometric Abstract H & F (Neural Network style) -->
+  <g transform="translate(96, 126)" fill="none" stroke="url(#glow)" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon-glow)">
+    
+    <!-- Base Nodes -->
+    <g stroke-width="14">
+      <!-- Left side of H -->
+      <path d="M 40 40 L 40 220" />
+      <!-- Right side of H -->
+      <path d="M 120 40 L 120 220" />
+      <!-- H crossbar -->
+      <path d="M 40 130 L 120 130" />
+      
+      <!-- F stem -->
+      <path d="M 220 40 L 220 220" />
+      <!-- F top branch -->
+      <path d="M 220 40 L 280 40" />
+      <!-- F middle branch -->
+      <path d="M 220 130 L 260 130" />
+    </g>
+
+    <!-- Synthetic Neural Connections (Data lines) -->
+    <path d="M 120 40 L 220 130" stroke-width="6" stroke-dasharray="6 " opacity="0.8" />
+    <path d="M 120 220 L 220 130" stroke-width="6" stroke-dasharray="6 6" opacity="0.5" />
+    <path d="M 40 220 L 120 130" stroke-width="4" opacity="0.4" />
+    <path d="M 120 40 L 40 130" stroke-width="4" opacity="0.4" />
+
+    <!-- Pulsing Node Endpoints -->
+    <!-- Left H Nodes -->
+    <circle cx="40" cy="40" r="10" fill="#0B0F19" stroke-width="6"/>
+    <circle cx="40" cy="220" r="10" fill="#0B0F19" stroke-width="6"/>
+    <!-- Right H Nodes -->
+    <circle cx="120" cy="40" r="12" fill="#0B0F19" stroke-width="6"/>
+    <circle cx="120" cy="220" r="10" fill="#0B0F19" stroke-width="6"/>
+    <!-- Intersections -->
+    <circle cx="40" cy="130" r="8" fill="#0B0F19" stroke-width="4"/>
+    <circle cx="120" cy="130" r="8" fill="#0B0F19" stroke-width="4"/>
+    
+    <!-- F Nodes -->
+    <circle cx="220" cy="40" r="12" fill="#0B0F19" stroke-width="6"/>
+    <circle cx="220" cy="220" r="10" fill="#0B0F19" stroke-width="6"/>
+    <circle cx="220" cy="130" r="14" fill="#00F0FF" stroke="none" opacity="0.9"/> <!-- Emissive central node -->
+    
+    <!-- F Branch Ends -->
+    <circle cx="280" cy="40" r="8" fill="#0B0F19" stroke-width="4"/>
+    <circle cx="260" cy="130" r="8" fill="#0B0F19" stroke-width="4"/>
+  </g>
+</svg>
